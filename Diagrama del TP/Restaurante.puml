@@ -1,0 +1,141 @@
+@startuml
+
+title Forgon del Barrio.
+
+class Cliente{
+-Nombre
+-Apellido
+}
+
+
+abstract class Pedidos{
+#IdPedido
+-FechaPedido
+-MontoTotal
+-PlatoPedido(Item,Combo)
+
+
+-TipoDePedido()
+-ModificarPedido()
+
+}
+
+' Relaciones
+Pedidos <|-- PedidoSalon
+Pedidos <|-- PedidoRetirar
+Pedidos <|--PedidoEnvio
+
+class PedidoSalon{
+-NumerodeMesa
+-ModificarPedido()
+}
+
+class PedidoRetirar{
+-HorarioDeRetiro
+-ModificarPedido()
+}
+
+class PedidoEnvio{
+-DomicilioPedido
+-CostodeEnvio
+}
+
+' CADETE QUE ES? TIENE OBRA SOCIAL?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class Estacion{
+
+-NombreEstacion
+
++RecibirPedido(Pedido:Pedidos)
++EstadoPedido()
+
+}
+' TENEMOS QUE VER COMO PORONGA ESTABLECER EL ESTADO DEL PEDIDO
+' AVERIGUAR SI LOS TIPOS DE ESTACIONES SON HIJOS O ALGO DE ESTACION
+
+
+
+
+
+
+
+
+
+
+'NO SI SI VA
+abstract class Categoria{
+
+}
+
+class Item{
+
+-NombreItem
+-PrecioItem
++Categoria
+-EstacionAsignada
+
+}
+
+class Combo{
+-NombreCombo
+-PrecioCombo
+-Descuento
++ Armarcombo(Carta:Item,Carta:Platos,Descuento);
+}
+
+'Relacion
+Item 	*-- Combo
+
+
+abstract class MetodoPago{
++Cobrar(Monto:Pedidos,Descuento:Descuentos)
+}
+
+class Efectivo{
++Cobrar()
+}
+
+class Tarjetas{
++Cobrar()
+}
+
+class BilleteraVirtual{
++Cobrar()
+}
+'Relacion
+MetododePago <|-- Efectivo
+MetododePago <|-- Tarjetas
+MetododePago <|-- BilleteraVirtual
+
+
+
+'DEFINIR COMO ELEGIR QUE DESCUENTO APLICAR
+abstract class Descuentos{
+}
+
+class DiaDescuentos{
+}
+
+class EfectivoDescuentos{
+}
+
+Descuentos <|-- DiaDescuentos
+Descuentos <|-- EfectivoDescuentos
+
+
+
+@enduml

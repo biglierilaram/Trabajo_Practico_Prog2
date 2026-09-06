@@ -1,0 +1,29 @@
+@startuml
+title Diagrama de Clases - Celulares
+class Persona {
+- nombre: string
+- celular: Celular
++ llamarPorCelular(destinatario: Persona):void
+}
+class Celular {
+- marca: string
+- modelo: string
+- bateria: Bateria
+- numero: number
++ llamar(destino: Celular): number
++ getCargaBateria(): number
++ getCargaBateriaPorcentaje(): number
++ estaApagado(): boolean
++ recargar(): void
+}
+class Bateria {
+- puntosDeCarga: number
++ getEstado(): number
++ cargar(puntos: number): void
+}
+' relaciones
+Persona o-- Celular
+Celular *-- Bateria
+
+
+@enduml
