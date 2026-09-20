@@ -8,7 +8,7 @@ class Cliente{
 }
 
 
-abstract class Pedidos{
+abstract class Pedido{
 #IdPedido
 -FechaPedido
 -MontoTotal
@@ -27,12 +27,12 @@ Pedidos <|--PedidoEnvio
 
 class PedidoSalon{
 -NumerodeMesa
--ModificarPedido()
+
 }
 
 class PedidoRetirar{
 -HorarioDeRetiro
--ModificarPedido()
+
 }
 
 class PedidoEnvio{
@@ -43,14 +43,7 @@ class PedidoEnvio{
 ' CADETE QUE ES? TIENE OBRA SOCIAL?
 
 
-
-
-
-
-
-
-
-
+' CADETE QUE ES? TIENE OBRA SOCIAL?
 
 
 
@@ -64,8 +57,6 @@ class Estacion{
 +EstadoPedido()
 
 }
-' TENEMOS QUE VER COMO PORONGA ESTABLECER EL ESTADO DEL PEDIDO
-' AVERIGUAR SI LOS TIPOS DE ESTACIONES SON HIJOS O ALGO DE ESTACION
 
 
 
@@ -76,29 +67,93 @@ class Estacion{
 
 
 
-'NO SI SI VA
-abstract class Categoria{
+
+
+
+
+
+
+
+
+
+
+
+'PADRE DE ARTICULO Y COMBO
+abstract class Item{
+#Nombre: String
+#ID: number
+
+'A CHECKEAR
+'constructor(Nombre:String,ID:number){'
+'this.Nombre = Nombre
+'this.ID = ID}
+
++PrecioFinal()
+}
+
+
+class Articulo extends Item{
+-PrecioArticulo : Number
+-Categoria : Categoria
+
+'A CHECKEAR
+'constructor(PrecioArticulo:PrecioArticulo, Categoria: Categoria){
+'    super(Nombre,ID);
+'    this.PrecioArticulo = PrecioArticulo
+'    this.Categoria = Categoria}
+
 
 }
 
-class Item{
 
--NombreItem
--PrecioItem
-+Categoria
--EstacionAsignada
+class Combo extends Item{
+
+-PrecioCombo : PrecioCombo
+-Articulos :Articulo[]
+-CantidadArticulos : number
+
+''+Armarcombo();
 
 }
 
-class Combo{
--NombreCombo
--PrecioCombo
--Descuento
-+ Armarcombo(Carta:Item,Carta:Platos,Descuento);
+enum Categoria{
+-ENTRADA
+-PLATOPRINCIPAL
+-BEBIDA
+-POSTRE
 }
 
-'Relacion
-Item 	*-- Combo
+
+Interface PrecioCombo{
++CalcularPrecio(Articulo: Articulo[]); 
+'Calcular Precio va a calcular en las clases de abajo por separado el precio final del combo con distintos descuentos.
+}
+
+class DescuentoPorcentual implements PrecioCombo{
+-PorcentajeDescuento: number
+' +CalcularPrecio() Lo implementa desde PrecioCombo
+}
+
+class DescuentoFijo implements PrecioCombo{
+-MontoDescontado: number
+' +CalcularPrecio() Lo implementa desde PrecioCombo
+}
+
+
+'Relaciones
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 abstract class MetodoPago{
