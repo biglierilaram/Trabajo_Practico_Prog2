@@ -3,22 +3,25 @@
 title Forgon del Barrio.
 
 class Cliente{
--Nombre
--Apellido
+- IdCliente
+- Nombre
+- Apellido
 }
-
+' Incluí IdCliente y sacaria -nombre y -apellido, no me interesan, dejo solo un # de cliente
+' Relacion Cliente pedido (asociacion, 1 cliente varios pedidos)
 
 abstract class Pedidos{
-#IdPedido
--FechaPedido
--MontoTotal
--PlatoPedido(Item,Combo)
+# IdPedido
+- FechaPedido
+- MontoTotal
+- Estado
+- Articulos
 
-
--TipoDePedido()
--ModificarPedido()
-
++ ModificarPedido
 }
+'Agrego Estado (en proparacion, listo, entregado)
+'Saco -TipoDePedido() ya que son las clases que heredan
+
 
 ' Relaciones
 Pedidos <|-- PedidoSalon
@@ -27,18 +30,18 @@ Pedidos <|--PedidoEnvio
 
 class PedidoSalon{
 -NumerodeMesa
--ModificarPedido()
 }
 
 class PedidoRetirar{
 -HorarioDeRetiro
--ModificarPedido()
 }
 
 class PedidoEnvio{
 -DomicilioPedido
--CostodeEnvio
+-CalcularEnvio
 }
+'Agrego calcular envio
+'Saco modificar pedido de las clases heredadas ya que lo hace la clase pedidos
 
 ' CADETE QUE ES? TIENE OBRA SOCIAL?
 
