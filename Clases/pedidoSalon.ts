@@ -1,5 +1,5 @@
 import { Cliente } from "./cliente";
-import { Pedido } from "./pedidos";
+import { Pedido } from "./pedido";
 
 export class PedidoSalon extends Pedido {
     private numeroDeMesa: number;
