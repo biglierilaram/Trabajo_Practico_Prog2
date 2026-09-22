@@ -7,51 +7,38 @@ class Cliente{
 -Apellido
 }
 
+class RestauranteForgon{
 
-abstract class Pedidos{
+}
+
+abstract class Pedido{
 #IdPedido
--FechaPedido
--MontoTotal
--PlatoPedido(Item,Combo)
+-FechaPedido: DiaSemana
+-ProductosFinales: Item[]
+-MetodoDePago: MetodoDePago
 
 
--TipoDePedido()
++MontoTotalACobrar(productos: ProductosFinales, metodo: MetodoDePago)
+'///+Cobrar(MontoACobrarPedido:Pedido, DescuentoAplicado:CalcularDescuento) ////
 -ModificarPedido()
 
 }
 
-' Relaciones
-Pedidos <|-- PedidoSalon
-Pedidos <|-- PedidoRetirar
-Pedidos <|--PedidoEnvio
-
 class PedidoSalon{
--NumerodeMesa
--ModificarPedido()
+-NumerodeMesa: number
 }
 
 class PedidoRetirar{
--HorarioDeRetiro
--ModificarPedido()
+-HorarioDeRetiro: string
+
 }
 
 class PedidoEnvio{
--DomicilioPedido
--CostodeEnvio
+-DomicilioPedido : string
+-CostodeEnvio : number
 }
 
 ' CADETE QUE ES? TIENE OBRA SOCIAL?
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -64,8 +51,6 @@ class Estacion{
 +EstadoPedido()
 
 }
-' TENEMOS QUE VER COMO PORONGA ESTABLECER EL ESTADO DEL PEDIDO
-' AVERIGUAR SI LOS TIPOS DE ESTACIONES SON HIJOS O ALGO DE ESTACION
 
 
 
@@ -76,66 +61,202 @@ class Estacion{
 
 
 
-'NO SI SI VA
-abstract class Categoria{
+
+
+'//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+'PADRE DE ARTICULO Y COMBO
+abstract class Item{
+#Nombre: String
+#ID: number
+'A CHECKEAR
+'constructor(Nombre:String,ID:number){'
+'this.Nombre = Nombre
+'this.ID = ID}
+
++abstract PrecioFinal():number
+}
+
+------------------------------------------------------------------------------------
+
+enum Categoria{
+ENTRADA,
+PLATOPRINCIPAL,
+BEBIDA,
+POSTRE,
+}
+
+------------------------------------------------------------------------------------
+
+class Articulo extends Item {
+-PrecioArticulo : Number
+-Categoria : Categoria
+'A CHECKEAR
+'constructor(PrecioArticulo:PrecioArticulo, Categoria: Categoria){
+'    super(Nombre,ID);
+'    this.PrecioArticulo = PrecioArticulo
+'    this.Categoria = Categoria}
+
++PrecioFinal()
+'return this.PrecioArticulo
+}
+
+'const Hamburguesita = new Articulo("Hamburguesa",12,9000,Categoria.PLATOPRINCIPAL);
+'Hamburguesita.PrecioFinal(); (Retorna 9k)
+'const Coquita = new Articulo ("Coquita",13,5000,Categoria.BEBIDA);
+------------------------------------------------------------------------------------
+
+class Combo extends Item {
+-PrecioCombo : PrecioCombo
+-Articulos :Articulo[]
+'constructor(){
+'super('Parametros);
+'this.PrecioCombo=PrecioCombo
+'this.Articulos: [];
+'}
+
++AgregarArticulo()
+'this.Articulos.push(articulo);
++PrecioFinal()
+'No tan claro como funciona este metodo en Combos
+}
+
+
+
+'const COMBO1 =new Combo("Combo 1",1,Descuentode30);
+'COMBO1.AgregarArticulo(Hamburguesita);
+'COMBO1.AgregarArticulo(Coquita);
+------------------------------------------------------------------------------------
+
+abstract class PrecioCombo{
++abstract CalcularPrecio(Articulo: Articulo[]) 
+'Calcular Precio va a calcular en las clases de abajo por separado el precio final del combo con distintos descuentos.
+}
+
+------------------------------------------------------------------------------------
+
+class DescuentoPorcentualCombo extends PrecioCombo{
+-PorcentajeDescuentoCombo: number
+' +CalcularPrecio() Lo implementa o hereda (duda) desde PrecioCombo
+}
+
+'cont Descuentode30 = new DescuentoPorcentualCombo(30)
+Descuento30.CalcularPrecio()
+------------------------------------------------------------------------------------
+
+class DescuentoFijoCombo extends PrecioCombo{
+-MontoDescontadoCombo: number
+' +CalcularPrecio() Lo implementa o hereda (duda) desde PrecioCombo
+}
+
+------------------------------------------------------------------------------------
+
+'//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+enum DiaSemana{
+LUNES,
+MARTES, 
+MIERCOLES, 
+JUEVES, 
+VIERNES, 
+SABADO, 
+DOMINGO, 
+}
+
+------------------------------------------------------------------------------------
+
+enum TipoDeMetodoDePago{
+EFECTIVO,
+TARJETA,
+BILLETERAVIRTUAL,
+}
+
+------------------------------------------------------------------------------------
+
+abstract class MetodoDePago{
+
+#NombreMetodoDePago: String
+#TipoDeMetodoDePago: TipoDeMetodoDePago
+
++CalcularDescuento(dto: Descuentos)
 
 }
 
-class Item{
-
--NombreItem
--PrecioItem
-+Categoria
--EstacionAsignada
-
-}
-
-class Combo{
--NombreCombo
--PrecioCombo
--Descuento
-+ Armarcombo(Carta:Item,Carta:Platos,Descuento);
-}
-
-'Relacion
-Item 	*-- Combo
-
-
-abstract class MetodoPago{
-+Cobrar(Monto:Pedidos,Descuento:Descuentos)
-}
+------------------------------------------------------------------------------------
 
 class Efectivo{
-+Cobrar()
+
 }
+
+------------------------------------------------------------------------------------
 
 class Tarjetas{
-+Cobrar()
+
 }
+
+------------------------------------------------------------------------------------
 
 class BilleteraVirtual{
-+Cobrar()
+
 }
-'Relacion
-MetododePago <|-- Efectivo
-MetododePago <|-- Tarjetas
-MetododePago <|-- BilleteraVirtual
 
+------------------------------------------------------------------------------------
 
-
-'DEFINIR COMO ELEGIR QUE DESCUENTO APLICAR. 
 abstract class Descuentos{
++EsAplicable(pedido: Pedido):boolean  
 }
 
-class DiaDescuentos{
+------------------------------------------------------------------------------------
+
+class DiaDescuentos extends Descuentos{
+-Dia: DiaSemana
+-PorcentajeDia: number 
+
++EsAplicable(pedido: Pedido):boolean
 }
 
-class EfectivoDescuentos{
+------------------------------------------------------------------------------------
+
+class EfectivoDescuentos extemds Descuentos{
+
+-PorcentajeEfvo: number    
++EsAplicable(pedido: Pedido):boolean   
 }
+
+
+'//////////////////////////////////////////////////////////////////////////////////////////////////
+' Relaciones
+
+Cliente *-- Pedido
+DiaSemana--Pedido
 
 Descuentos <|-- DiaDescuentos
 Descuentos <|-- EfectivoDescuentos
 
 
+Pedido <|-- PedidoSalon
+Pedido <|-- PedidoRetirar
+Pedido <|--PedidoEnvio
+Pedido *-l-Estacion 
+Pedido <|-- Item
+Pedido o--Categoria
+
+
+Item <|-- Articulo
+Item <|-- Combo
+Item o-l- MetodoDePago
+
+
+MetodoDePago <|-- Efectivo
+MetodoDePago <|-- Tarjetas
+MetodoDePago <|-- BilleteraVirtual
+MetodoDePago o-l- Descuentos
+
+Combo *--PrecioCombo
+
+PrecioCombo <|-- DescuentoPorcentualCombo
+PrecioCombo <|-- DescuentoFijoCombo
 
 @enduml
+
