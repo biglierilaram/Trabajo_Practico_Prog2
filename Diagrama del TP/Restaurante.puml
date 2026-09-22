@@ -4,20 +4,21 @@ title Forgon del Barrio.
 
 class Cliente{
 - IdCliente
-- Nombre
-- Apellido
 }
 ' Incluí IdCliente y sacaria -nombre y -apellido, no me interesan, dejo solo un # de cliente
 ' Relacion Cliente pedido (asociacion, 1 cliente varios pedidos)
 
 abstract class Pedidos{
-# IdPedido
-- FechaPedido
-- MontoTotal
-- Estado
-- Articulos
-
-+ ModificarPedido
+#idPedido
+-fechaPedido
+-estado
+-articulos
+ 
++agregarArticulo()
++quitarArticulo()
++modificarPedido()
++estadoPedido()
++calcularTotal()
 }
 'Agrego Estado (en proparacion, listo, entregado)
 'Saco -TipoDePedido() ya que son las clases que heredan
@@ -48,18 +49,7 @@ class PedidoEnvio{
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-class Estacion{
+abstract class Estacion{
 
 -NombreEstacion
 
