@@ -5,15 +5,20 @@ title Forgon del Barrio.
 class Cliente{
 -Nombre
 -Apellido
+
 }
 
-------------------------------------------------------------------------------------
+'//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class RestauranteForgon{
+-Nombre
+-HistorialPedidos: Pedido[]
+
++GuardarHistorialPedido()
 
 }
 
-------------------------------------------------------------------------------------
+'//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 abstract class Pedido{
 #IdPedido
@@ -24,49 +29,35 @@ abstract class Pedido{
 +AgregarItems()
 +QuitarItems()
 +GetFechaPedido()
-'return this.FechaPedido;
 
 }
 
-------------------------------------------------------------------------------------
 
-class Caja{
--Pedidos: Pedido
--MetodoDePago: MetodoDePago
-
-+CompetenciaDeDescuentos()
-+Cobrar()
-+GetMetodoDePago()
-return this.MetodoDePago;
-
-}
-
-------------------------------------------------------------------------------------
 
 class PedidoSalon{
 -NumerodeMesa: number
 }
 
-------------------------------------------------------------------------------------
+
 
 class PedidoRetirar{
 -HorarioDeRetiro: string
 
 }
 
-------------------------------------------------------------------------------------
+
 
 class PedidoEnvio{
 -DomicilioPedido : string
 -CostodeEnvio : number
 }
-------------------------------------------------------------------------------------
 
+'//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ' CADETE QUE ES? TIENE OBRA SOCIAL?
 
 
-------------------------------------------------------------------------------------
+'//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class Estacion{
 
@@ -76,10 +67,6 @@ class Estacion{
 +EstadoPedido()
 
 }
-
-------------------------------------------------------------------------------------
-
-
 
 '//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -104,9 +91,9 @@ BEBIDA,
 POSTRE,
 }
 
-------------------------------------------------------------------------------------
 
-class Articulo extends Item {
+
+class Articulo{
 -PrecioArticulo : Number
 -Categoria : Categoria
 'A CHECKEAR
@@ -122,9 +109,9 @@ class Articulo extends Item {
 'const Hamburguesita = new Articulo("Hamburguesa",12,9000,Categoria.PLATOPRINCIPAL);
 'Hamburguesita.PrecioFinal(); (Retorna 9k)
 'const Coquita = new Articulo ("Coquita",13,5000,Categoria.BEBIDA);
-------------------------------------------------------------------------------------
 
-class Combo extends Item {
+
+class Combo{
 -PrecioCombo : PrecioCombo
 -Articulos :Articulo[]
 'constructor(){
@@ -144,33 +131,29 @@ class Combo extends Item {
 'const COMBO1 =new Combo("Combo 1",1,Descuentode30);
 'COMBO1.AgregarArticulo(Hamburguesita);
 'COMBO1.AgregarArticulo(Coquita);
-------------------------------------------------------------------------------------
+
 
 abstract class PrecioCombo{
 +abstract CalcularPrecio(Articulo: Articulo[]) 
 'Calcular Precio va a calcular en las clases de abajo por separado el precio final del combo con distintos descuentos.
 }
 
-------------------------------------------------------------------------------------
 
-class DescuentoPorcentualCombo extends PrecioCombo{
+class DescuentoPorcentualCombo{
 -PorcentajeDescuentoCombo: number
 ' +CalcularPrecio() Lo implementa o hereda (duda) desde PrecioCombo
 }
 
 'cont Descuentode30 = new DescuentoPorcentualCombo(30)
-Descuento30.CalcularPrecio()
-------------------------------------------------------------------------------------
+'Descuento30.CalcularPrecio()
 
-class DescuentoFijoCombo extends PrecioCombo{
+
+class DescuentoFijoCombo{
 -MontoDescontadoCombo: number
 ' +CalcularPrecio() Lo implementa o hereda (duda) desde PrecioCombo
 }
 
-------------------------------------------------------------------------------------
-
 '//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 enum DiaSemana{
 LUNES,
@@ -182,7 +165,7 @@ SABADO,
 DOMINGO, 
 }
 
-------------------------------------------------------------------------------------
+
 
 enum TipoDeMetodoDePago{
 EFECTIVO,
@@ -190,95 +173,104 @@ TARJETA,
 BILLETERAVIRTUAL,
 }
 
-------------------------------------------------------------------------------------
+
 
 abstract class MetodoDePago{
 
 #NombreMetodoDePago: String
 #TipoDeMetodoDePago: TipoDeMetodoDePago
 
-+CalcularDescuento(dto: Descuentos)
-
 }
 
-------------------------------------------------------------------------------------
+
 
 class Efectivo{
 
 }
 
-------------------------------------------------------------------------------------
+
 
 class Tarjetas{
 
 }
 
-------------------------------------------------------------------------------------
+
 
 class BilleteraVirtual{
 
 }
 
-------------------------------------------------------------------------------------
 
-abstract class Descuentos{
-+EsAplicable(Caja:Caja):boolean  
+
+abstract class Descuento{
+#PorcentajeDescuento:number
++EsAplicable(Caja:Caja):boolean 
++CantidadDeDescuento(Cantidad:number):number 
 }
 
-------------------------------------------------------------------------------------
 
-class DiaDescuentos extends Descuentos{
+class DescuentoPorDia{
 -Dia: DiaSemana
--PorcentajeDia: number 
-
-+EsAplicable(Caja:Caja):boolean{
- return if(this.Caja.Pedido.GetFechaPedido()=== this.Dia);
-}
++EsAplicable(Caja:Caja):boolean
+ 'return if(this.Caja.Pedido.GetFechaPedido()=== this.Dia);
+'const DescuentoLunes = New DiaDescuentos(DiaSemana.LUNES,20)
 }
 
-------------------------------------------------------------------------------------
+class DescuentoPorMetodoDePago{
+-MetodoDePago:TipoDeMetodoDePago
 
-class EfectivoDescuentos extends Descuentos{
-
--PorcentajeEfectivo: number    
-+EsAplicable(Caja:Caja):boolean{
-return if(this.Caja.GetMetodoDePago === This.MetodoDePago.EFECTIVO)
-}
++EsAplicable(Caja:Caja):boolean
+'return if(this.Caja.GetMetodoDePago === This.MetodoDePago.TipoDeMetodoDePago)
 }
 
+class Caja{
+-Pedidos: Pedido
+-MetodoDePago: MetodoDePago
 
-'//////////////////////////////////////////////////////////////////////////////////////////////////
++CompetenciaDeDescuentos(efectivo: Descuento, dia:Descuento)
+'Va a devolver la competencia entre descuentos creados en las instancias del diadescuento o metododepago establecido con descuento
+'Seguramente se invocando el metodo EsAplicable verificando si es true o false y comparando cual es mas grande
++CobrarPrecioFinalConDescuento()
+'Va a recibir el monto total del pedido y va a aplicar desde el metodo competencia cual es el porcentaje mas alto y va a descontarselo al total
++GetMetodoDePago()
++getDiaPedido()
+}
+
+'////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ' Relaciones
 
-Cliente *-- Pedido
-DiaSemana--Pedido
-
-Descuentos <|-- DiaDescuentos
-Descuentos <|-- EfectivoDescuentos
-
-
-Pedido <|-- PedidoSalon
+Pedido <|-- PedidoEnvio
 Pedido <|-- PedidoRetirar
-Pedido <|--PedidoEnvio
-Pedido *-l-Estacion 
-Pedido <|-- Item
-Pedido o--Categoria
-
+Pedido <|-- PedidoSalon
+Pedido o-- Item
 
 Item <|-- Articulo
 Item <|-- Combo
-Item o-l- MetodoDePago
 
 
 MetodoDePago <|-- Efectivo
 MetodoDePago <|-- Tarjetas
 MetodoDePago <|-- BilleteraVirtual
-MetodoDePago o-l- Descuentos
 
-Combo *--PrecioCombo
+Descuento <|-- DescuentoPorMetodoDePago
+Descuento <|-- DescuentoPorDia
 
-PrecioCombo <|-- DescuentoPorcentualCombo
 PrecioCombo <|-- DescuentoFijoCombo
+PrecioCombo <|-- DescuentoPorcentualCombo
+
+Combo o-- Articulo
+Combo *-- PrecioCombo
+
+Caja o-- MetodoDePago
+Caja o-- Pedido
+Caja o-- Descuento
+
+Estacion -- Pedido
+
+RestauranteForgon o-- Estacion
+RestauranteForgon o-- Pedido
+RestauranteForgon -- Cliente
+RestauranteForgon *-- Caja
 
 @enduml
 
