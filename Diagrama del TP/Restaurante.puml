@@ -7,41 +7,66 @@ class Cliente{
 -Apellido
 }
 
+------------------------------------------------------------------------------------
+
 class RestauranteForgon{
 
 }
+
+------------------------------------------------------------------------------------
 
 abstract class Pedido{
 #IdPedido
 -FechaPedido: DiaSemana
 -ProductosFinales: Item[]
--MetodoDePago: MetodoDePago
 
-
-+MontoTotalACobrar(productos: ProductosFinales, metodo: MetodoDePago)
-'///+Cobrar(MontoACobrarPedido:Pedido, DescuentoAplicado:CalcularDescuento) ////
--ModificarPedido()
++CalcularPrecioTotalPedidoSinDescuentos()
++AgregarItems()
++QuitarItems()
++GetFechaPedido()
+'return this.FechaPedido;
 
 }
+
+------------------------------------------------------------------------------------
+
+class Caja{
+-Pedidos: Pedido
+-MetodoDePago: MetodoDePago
+
++CompetenciaDeDescuentos()
++Cobrar()
++GetMetodoDePago()
+return this.MetodoDePago;
+
+}
+
+------------------------------------------------------------------------------------
 
 class PedidoSalon{
 -NumerodeMesa: number
 }
+
+------------------------------------------------------------------------------------
 
 class PedidoRetirar{
 -HorarioDeRetiro: string
 
 }
 
+------------------------------------------------------------------------------------
+
 class PedidoEnvio{
 -DomicilioPedido : string
 -CostodeEnvio : number
 }
+------------------------------------------------------------------------------------
+
 
 ' CADETE QUE ES? TIENE OBRA SOCIAL?
 
 
-
+------------------------------------------------------------------------------------
 
 class Estacion{
 
@@ -52,14 +77,7 @@ class Estacion{
 
 }
 
-
-
-
-
-
-
-
-
+------------------------------------------------------------------------------------
 
 
 
@@ -77,7 +95,7 @@ abstract class Item{
 +abstract PrecioFinal():number
 }
 
-------------------------------------------------------------------------------------
+
 
 enum Categoria{
 ENTRADA,
@@ -204,7 +222,7 @@ class BilleteraVirtual{
 ------------------------------------------------------------------------------------
 
 abstract class Descuentos{
-+EsAplicable(pedido: Pedido):boolean  
++EsAplicable(Caja:Caja):boolean  
 }
 
 ------------------------------------------------------------------------------------
@@ -213,15 +231,19 @@ class DiaDescuentos extends Descuentos{
 -Dia: DiaSemana
 -PorcentajeDia: number 
 
-+EsAplicable(pedido: Pedido):boolean
++EsAplicable(Caja:Caja):boolean{
+ return if(this.Caja.Pedido.GetFechaPedido()=== this.Dia);
+}
 }
 
 ------------------------------------------------------------------------------------
 
-class EfectivoDescuentos extemds Descuentos{
+class EfectivoDescuentos extends Descuentos{
 
--PorcentajeEfvo: number    
-+EsAplicable(pedido: Pedido):boolean   
+-PorcentajeEfectivo: number    
++EsAplicable(Caja:Caja):boolean{
+return if(this.Caja.GetMetodoDePago === This.MetodoDePago.EFECTIVO)
+}
 }
 
 
