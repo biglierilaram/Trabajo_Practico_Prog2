@@ -18,9 +18,10 @@ abstract class Pedidos{
 +quitarArticulo()
 +modificarPedido()
 +estadoPedido()
++confirmarPedido()
 +calcularTotal()
 }
-'Agrego Estado (en proparacion, listo, entregado)
+'Agrego Estado (pendiente, en proparacion, listo, entregado)
 'Saco -TipoDePedido() ya que son las clases que heredan
 
 
