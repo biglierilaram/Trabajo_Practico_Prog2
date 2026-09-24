@@ -5,144 +5,272 @@ title Forgon del Barrio.
 class Cliente{
 -Nombre
 -Apellido
+
 }
 
+'//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-abstract class Pedidos{
+class RestauranteForgon{
+-Nombre
+-HistorialPedidos: Pedido[]
+
++GuardarHistorialPedido()
+
+}
+
+'//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+abstract class Pedido{
 #IdPedido
--FechaPedido
--MontoTotal
--PlatoPedido(Item,Combo)
+-FechaPedido: DiaSemana
+-ProductosFinales: Item[]
 
-
--TipoDePedido()
--ModificarPedido()
++CalcularPrecioTotalPedidoSinDescuentos()
++AgregarItems()
++QuitarItems()
++GetFechaPedido()
 
 }
 
-' Relaciones
-Pedidos <|-- PedidoSalon
-Pedidos <|-- PedidoRetirar
-Pedidos <|--PedidoEnvio
+
 
 class PedidoSalon{
--NumerodeMesa
--ModificarPedido()
+-NumerodeMesa: number
 }
+
+
 
 class PedidoRetirar{
--HorarioDeRetiro
--ModificarPedido()
+-HorarioDeRetiro: string
+
 }
 
+
+
 class PedidoEnvio{
--DomicilioPedido
--CostodeEnvio
+-DomicilioPedido : string
+-CostodeEnvio : number
 }
+
+'//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ' CADETE QUE ES? TIENE OBRA SOCIAL?
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+'//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+' duda: seria estadoPedido o podria ser EstadoItem (si es que quedo como los platos individuales), Pedido no seria ya el plato completo armado
+' y el estado lo tendria q tener cada item por separado? 
 class Estacion{
 
 -NombreEstacion
 
-+RecibirPedido(Pedido:Pedidos)
++RecibirPedido(Pedido:Pedido)
 +EstadoPedido()
 
 }
-' TENEMOS QUE VER COMO PORONGA ESTABLECER EL ESTADO DEL PEDIDO
-' AVERIGUAR SI LOS TIPOS DE ESTACIONES SON HIJOS O ALGO DE ESTACION
 
+'//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+'PADRE DE ARTICULO Y COMBO
+abstract class Item{
+#Nombre: String
+#ID: number
+'A CHECKEAR
+'constructor(Nombre:String,ID:number){'
+'this.Nombre = Nombre
+'this.ID = ID}
 
-
-
-
-
-
-
-
-'NO SI SI VA
-abstract class Categoria{
-
++abstract PrecioFinal():number
 }
 
-class Item{
 
--NombreItem
--PrecioItem
-+Categoria
--EstacionAsignada
 
+enum Categoria{
+ENTRADA,
+PLATOPRINCIPAL,
+BEBIDA,
+POSTRE,
 }
+
+
+
+class Articulo{
+-PrecioArticulo : Number
+-Categoria : Categoria
+'A CHECKEAR
+'constructor(PrecioArticulo:PrecioArticulo, Categoria: Categoria){
+'    super(Nombre,ID);
+'    this.PrecioArticulo = PrecioArticulo
+'    this.Categoria = Categoria}
+
++PrecioFinal()
+'return this.PrecioArticulo
+}
+
+'const Hamburguesita = new Articulo("Hamburguesa",12,9000,Categoria.PLATOPRINCIPAL);
+'Hamburguesita.PrecioFinal(); (Retorna 9k)
+'const Coquita = new Articulo ("Coquita",13,5000,Categoria.BEBIDA);
+
 
 class Combo{
--NombreCombo
--PrecioCombo
--Descuento
-+ Armarcombo(Carta:Item,Carta:Platos,Descuento);
+-PrecioCombo : PrecioCombo
+-Articulos :Articulo[]
+'constructor(){
+'super('Parametros);
+'this.PrecioCombo=PrecioCombo
+'this.Articulos: [];
+'}
+
++AgregarArticulo()
+'this.Articulos.push(articulo);
++PrecioFinal()
+'No tan claro como funciona este metodo en Combos
 }
 
-'Relacion
-Item 	*-- Combo
 
 
-abstract class MetodoPago{
-+Cobrar(Monto:Pedidos,Descuento:Descuentos)
+'const COMBO1 =new Combo("Combo 1",1,Descuentode30);
+'COMBO1.AgregarArticulo(Hamburguesita);
+'COMBO1.AgregarArticulo(Coquita);
+
+
+abstract class PrecioCombo{
++abstract CalcularPrecio(Articulo: Articulo[]) 
+'Calcular Precio va a calcular en las clases de abajo por separado el precio final del combo con distintos descuentos.
 }
+
+
+class DescuentoPorcentualCombo{
+-PorcentajeDescuentoCombo: number
+' +CalcularPrecio() Lo implementa o hereda (duda) desde PrecioCombo
+}
+
+'cont Descuentode30 = new DescuentoPorcentualCombo(30)
+'Descuento30.CalcularPrecio()
+
+
+class DescuentoFijoCombo{
+-MontoDescontadoCombo: number
+' +CalcularPrecio() Lo implementa o hereda (duda) desde PrecioCombo
+}
+
+'//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+enum DiaSemana{
+LUNES,
+MARTES, 
+MIERCOLES, 
+JUEVES, 
+VIERNES, 
+SABADO, 
+DOMINGO, 
+}
+
+
+
+enum TipoDeMetodoDePago{
+EFECTIVO,
+TARJETA,
+BILLETERAVIRTUAL,
+}
+
+
+
+abstract class MetodoDePago{
+
+#NombreMetodoDePago: String
+#TipoDeMetodoDePago: TipoDeMetodoDePago
+
+}
+
+
 
 class Efectivo{
-+Cobrar()
+
 }
+
+
 
 class Tarjetas{
-+Cobrar()
+
 }
+
+
 
 class BilleteraVirtual{
-+Cobrar()
-}
-'Relacion
-MetodoPago <|-- Efectivo
-MetodoPago <|-- Tarjetas
-MetodoPago <|-- BilleteraVirtual
 
-
-'clase abstracta para los descuentos que se pueden plicar a un pedido (por pagar en efectivo, o por dia especial)
-'aplica: cada subclase decide con SU PROPIA logica si el pedido cumple la condicion para ese descuento
-'calcular: una vez que se sabe que aplica, calcula cuanto se descuenta sobre el total.
-abstract class Descuento { 
-
-  +aplica(pedido : Pedido) : boolean
-  +calcular(total : number) : number
 }
 
-Descuento <|-- DiaDescuento
-Descuento <|-- EfectivoDescuento
 
-class DiaDescuento{
+
+abstract class Descuento{
+#PorcentajeDescuento:number
++EsAplicable(Caja:Caja):boolean 
++CantidadDeDescuento(Cantidad:number):number 
 }
 
-class EfectivoDescuento{
+
+class DescuentoPorDia{
+-Dia: DiaSemana
++EsAplicable(Caja:Caja):boolean
+ 'return if(this.Caja.Pedido.GetFechaPedido()=== this.Dia);
+'const DescuentoLunes = New DiaDescuentos(DiaSemana.LUNES,20)
 }
 
-Descuentos <|-- DiaDescuentos
-Descuentos <|-- EfectivoDescuentos
+class DescuentoPorMetodoDePago{
+-MetodoDePago:TipoDeMetodoDePago
+
++EsAplicable(Caja:Caja):boolean
+'return if(this.Caja.GetMetodoDePago === This.MetodoDePago.TipoDeMetodoDePago)
+}
+
+class Caja{
+-Pedidos: Pedido
+-MetodoDePago: MetodoDePago
+
++CompetenciaDeDescuentos(efectivo: Descuento, dia:Descuento)
+'Va a devolver la competencia entre descuentos creados en las instancias del diadescuento o metododepago establecido con descuento
+'Seguramente se invocando el metodo EsAplicable verificando si es true o false y comparando cual es mas grande
++CobrarPrecioFinalConDescuento()
+'Va a recibir el monto total del pedido y va a aplicar desde el metodo competencia cual es el porcentaje mas alto y va a descontarselo al total
++GetMetodoDePago()
++getDiaPedido()
+}
+
+'////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+' Relaciones
+
+Pedido <|-- PedidoEnvio
+Pedido <|-- PedidoRetirar
+Pedido <|-- PedidoSalon
+Pedido o-- Item
+
+Item <|-- Articulo
+Item <|-- Combo
 
 
+MetodoDePago <|-- Efectivo
+MetodoDePago <|-- Tarjetas
+MetodoDePago <|-- BilleteraVirtual
+
+Descuento <|-- DescuentoPorMetodoDePago
+Descuento <|-- DescuentoPorDia
+
+PrecioCombo <|-- DescuentoFijoCombo
+PrecioCombo <|-- DescuentoPorcentualCombo
+
+Combo o-- Articulo
+Combo *-- PrecioCombo
+
+Caja o-- MetodoDePago
+Caja o-- Pedido
+Caja o-- Descuento
+
+Estacion -- Pedido
+
+RestauranteForgon o-- Estacion
+RestauranteForgon o-- Pedido
+RestauranteForgon -- Cliente
+RestauranteForgon *-- Caja
 
 @enduml
