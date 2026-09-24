@@ -8,6 +8,7 @@ class Cliente{
 }
 
 
+<<<<<<< Updated upstream
 abstract class Pedidos{
 #IdPedido
 -FechaPedido
@@ -17,6 +18,38 @@ abstract class Pedidos{
 
 -TipoDePedido()
 -ModificarPedido()
+=======
+class RestauranteForgon{
+-Nombre
+-HistorialPedidos: Pedido[]
+
++GuardarHistorialPedido()
+
+}
+
+'//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+enum EstadoDePedido{
+    -ENCONSTRUCCION
+    -CONFIRMADO
+    -FINALIZADO
+}
+
+
+
+abstract class Pedido{
+#IdPedido
+-FechaPedido: DiaSemana
+-ProductosFinales: Item[]
+-EstadoPedido:EstadoDePedido
+
++CalcularPrecioTotalPedidoSinDescuentos()
++AgregarItems()
++QuitarItems()
++GetFechaPedido()
++SetMontoFinalCobrado()
++GetMontoFinalCobrado()
++ConfirmarPedido()
+>>>>>>> Stashed changes
 
 }
 
@@ -56,9 +89,17 @@ class PedidoEnvio{
 
 
 
+enum TipoDeEstacion{
+    -
+    -
+    -
+    -
+}
+
 class Estacion{
 
 -NombreEstacion
+-TipoDeEstacion: TipoDeEstacion
 
 +RecibirPedido(Pedido:Pedidos)
 +EstadoPedido()
@@ -68,6 +109,18 @@ class Estacion{
 ' AVERIGUAR SI LOS TIPOS DE ESTACIONES SON HIJOS O ALGO DE ESTACION
 
 
+<<<<<<< Updated upstream
+=======
+
+'PADRE DE ARTICULO Y COMBO
+abstract class Item{
+#Nombre: String
+#ID: number
+'A CHECKEAR
+'constructor(Nombre:String,ID:number){'
+'this.Nombre = Nombre
+'this.ID = ID}
+>>>>>>> Stashed changes
 
 
 
@@ -90,11 +143,50 @@ class Item{
 
 }
 
+<<<<<<< Updated upstream
 class Combo{
 -NombreCombo
 -PrecioCombo
 -Descuento
 + Armarcombo(Carta:Item,Carta:Platos,Descuento);
+=======
+
+
+class Articulo{
+-PrecioArticulo : Number
+-Categoria : Categoria
+-Estacion: TipoDeEstacion
+'A CHECKEAR
+'constructor(PrecioArticulo:PrecioArticulo, Categoria: Categoria){
+'    super(Nombre,ID);
+'    this.PrecioArticulo = PrecioArticulo
+'    this.Categoria = Categoria}
+
++PrecioFinal()
+'return this.PrecioArticulo
++GetEstacion()
+}
+
+'const Hamburguesita = new Articulo("Hamburguesa",12,9000,Categoria.PLATOPRINCIPAL);
+'Hamburguesita.PrecioFinal(); (Retorna 9k)
+'const Coquita = new Articulo ("Coquita",13,5000,Categoria.BEBIDA);
+
+
+class Combo{
+-PrecioCombo : PrecioCombo
+-Articulos :Articulo[]
+'constructor(){
+'super('Parametros);
+'this.PrecioCombo=PrecioCombo
+'this.Articulos: [];
+'}
+
++AgregarArticulo()
+'this.Articulos.push(articulo);
++PrecioFinal()
+'No tan claro como funciona este metodo en Combos
++GetArticulos()
+>>>>>>> Stashed changes
 }
 
 'Relacion
@@ -133,8 +225,42 @@ class DiaDescuentos{
 class EfectivoDescuentos{
 }
 
+<<<<<<< Updated upstream
 Descuentos <|-- DiaDescuentos
 Descuentos <|-- EfectivoDescuentos
+=======
+class DescuentoPorMetodoDePago{
+-MetodoDePago:TipoDeMetodoDePago
+
++EsAplicable(Caja:Caja):boolean
+'return if(this.Caja.GetMetodoDePago === This.MetodoDePago.TipoDeMetodoDePago)
+}
+
+class Caja{
+-Pedidos: Pedido
+-MetodoDePago: MetodoDePago
+
++CompetenciaDeDescuentos(efectivo: Descuento, dia:Descuento)
+'Va a devolver la competencia entre descuentos creados en las instancias del diadescuento o metododepago establecido con descuento
+'Seguramente se invocando el metodo EsAplicable verificando si es true o false y comparando cual es mas grande
++CobrarPrecioFinalConDescuento()
+'Va a recibir el monto total del pedido y va a aplicar desde el metodo competencia cual es el porcentaje mas alto y va a descontarselo al total 
+'ademas va a guardar en el atributo de mi pedido MontoFinalCobrado el monto con descuento aplicado.
++GetMetodoDePago()
++getDiaPedido()
+}
+
+'////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+' Relaciones
+
+Pedido <|-- PedidoEnvio
+Pedido <|-- PedidoRetirar
+Pedido <|-- PedidoSalon
+Pedido o-- Item
+
+Item <|-- Articulo
+Item <|-- Combo
+>>>>>>> Stashed changes
 
 
 
