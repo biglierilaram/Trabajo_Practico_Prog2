@@ -117,20 +117,27 @@ class BilleteraVirtual{
 +Cobrar()
 }
 'Relacion
-MetododePago <|-- Efectivo
-MetododePago <|-- Tarjetas
-MetododePago <|-- BilleteraVirtual
+MetodoPago <|-- Efectivo
+MetodoPago <|-- Tarjetas
+MetodoPago <|-- BilleteraVirtual
 
 
+'clase abstracta para los descuentos que se pueden plicar a un pedido (por pagar en efectivo, o por dia especial)
+'aplica: cada subclase decide con SU PROPIA logica si el pedido cumple la condicion para ese descuento
+'calcular: una vez que se sabe que aplica, calcula cuanto se descuenta sobre el total.
+abstract class Descuento { 
 
-'DEFINIR COMO ELEGIR QUE DESCUENTO APLICAR
-abstract class Descuentos{
+  +aplica(pedido : Pedido) : boolean
+  +calcular(total : number) : number
 }
 
-class DiaDescuentos{
+Descuento <|-- DiaDescuento
+Descuento <|-- EfectivoDescuento
+
+class DiaDescuento{
 }
 
-class EfectivoDescuentos{
+class EfectivoDescuento{
 }
 
 Descuentos <|-- DiaDescuentos
