@@ -80,9 +80,10 @@ class Estacion{
 
 -NombreEstacion
 -TipoDeEstacion: TipoDeEstacion
+-Pedido: Pedido
 
-+RecibirPedido(Pedido:Pedidos)
-+EstadoPedido()
+
++CambiarEstadoItemAListo()
 
 }
 

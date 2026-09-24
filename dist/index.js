@@ -1,0 +1,26 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Articulo_1 = require("./Articulo");
+const Combo_1 = require("./Combo");
+const DescuentoFijoCombo_1 = require("./DescuentoFijoCombo");
+const Enums_1 = require("./Enums");
+const Enums_2 = require("./Enums");
+const NUMERO_1 = 7000;
+const NUMERO_2 = 3000;
+const NUMERO_3 = 4000;
+const ID_HAMBURGUESA = 1;
+const ID_PAPAS_FRITAS = 2;
+const ID_COCA_COLA = 3;
+const MONTO_DESCUENTO = 5000;
+const ID_COMBO = 1;
+const hamburguesa = new Articulo_1.Articulo("Hamburguesa", ID_HAMBURGUESA, NUMERO_1, Enums_1.Categoria.PLATOPRINCIPAL, Enums_2.TipoDeEstacion.CARNES);
+const papasFritas = new Articulo_1.Articulo("Papas Fritas", ID_PAPAS_FRITAS, NUMERO_2, Enums_1.Categoria.ENTRADA, Enums_2.TipoDeEstacion.ENSALADAS);
+const cocaCola = new Articulo_1.Articulo("CocaCola", ID_COCA_COLA, NUMERO_3, Enums_1.Categoria.BEBIDA, Enums_2.TipoDeEstacion.BARRA);
+const descuentoDe5000 = new DescuentoFijoCombo_1.DescuentoFijoCombo(MONTO_DESCUENTO);
+const combo1 = new Combo_1.Combo("Combo1", ID_COMBO, descuentoDe5000);
+combo1.agregarArticulos(hamburguesa);
+combo1.agregarArticulos(papasFritas);
+combo1.agregarArticulos(cocaCola);
+combo1.precioFinal();
+console.log(combo1.precioFinal());
+//# sourceMappingURL=index.js.map
