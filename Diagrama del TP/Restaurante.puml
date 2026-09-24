@@ -5,20 +5,11 @@ title Forgon del Barrio.
 class Cliente{
 -Nombre
 -Apellido
+
 }
 
+'//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< Updated upstream
-abstract class Pedidos{
-#IdPedido
--FechaPedido
--MontoTotal
--PlatoPedido(Item,Combo)
-
-
--TipoDePedido()
--ModificarPedido()
-=======
 class RestauranteForgon{
 -Nombre
 -HistorialPedidos: Pedido[]
@@ -28,13 +19,12 @@ class RestauranteForgon{
 }
 
 '//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 enum EstadoDePedido{
     -ENCONSTRUCCION
     -CONFIRMADO
     -FINALIZADO
 }
-
-
 
 abstract class Pedido{
 #IdPedido
@@ -49,46 +39,36 @@ abstract class Pedido{
 +SetMontoFinalCobrado()
 +GetMontoFinalCobrado()
 +ConfirmarPedido()
->>>>>>> Stashed changes
 
 }
 
-' Relaciones
-Pedidos <|-- PedidoSalon
-Pedidos <|-- PedidoRetirar
-Pedidos <|--PedidoEnvio
+
 
 class PedidoSalon{
--NumerodeMesa
--ModificarPedido()
+-NumerodeMesa: number
+
 }
+
+
 
 class PedidoRetirar{
--HorarioDeRetiro
--ModificarPedido()
+-HorarioDeRetiro: string
+
 }
 
+
+
 class PedidoEnvio{
--DomicilioPedido
--CostodeEnvio
+-DomicilioPedido : string
+-CostodeEnvio : number
 }
+
+'//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ' CADETE QUE ES? TIENE OBRA SOCIAL?
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+'//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 enum TipoDeEstacion{
     -
     -
@@ -105,12 +85,8 @@ class Estacion{
 +EstadoPedido()
 
 }
-' TENEMOS QUE VER COMO PORONGA ESTABLECER EL ESTADO DEL PEDIDO
-' AVERIGUAR SI LOS TIPOS DE ESTACIONES SON HIJOS O ALGO DE ESTACION
 
-
-<<<<<<< Updated upstream
-=======
+'//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 'PADRE DE ARTICULO Y COMBO
 abstract class Item{
@@ -120,38 +96,22 @@ abstract class Item{
 'constructor(Nombre:String,ID:number){'
 'this.Nombre = Nombre
 'this.ID = ID}
->>>>>>> Stashed changes
 
-
-
-
-
-
-
-
-'NO SI SI VA
-abstract class Categoria{
-
++abstract PrecioFinal():number
++
 }
 
-class Item{
 
--NombreItem
--PrecioItem
-+Categoria
--EstacionAsignada
 
+enum Categoria{
+ENTRADA,
+PLATOPRINCIPAL,
+BEBIDA,
+POSTRE,
 }
 
-<<<<<<< Updated upstream
-class Combo{
--NombreCombo
--PrecioCombo
--Descuento
-+ Armarcombo(Carta:Item,Carta:Platos,Descuento);
-=======
 
-
+'FALTARIA ESTADO DE ARTICULO PARA QUE LA ESTACION VAYA CAMBIANDOLO DESPUES
 class Articulo{
 -PrecioArticulo : Number
 -Categoria : Categoria
@@ -163,7 +123,6 @@ class Articulo{
 '    this.Categoria = Categoria}
 
 +PrecioFinal()
-'return this.PrecioArticulo
 +GetEstacion()
 }
 
@@ -184,51 +143,99 @@ class Combo{
 +AgregarArticulo()
 'this.Articulos.push(articulo);
 +PrecioFinal()
-'No tan claro como funciona este metodo en Combos
 +GetArticulos()
->>>>>>> Stashed changes
 }
 
-'Relacion
-Item 	*-- Combo
 
 
-abstract class MetodoPago{
-+Cobrar(Monto:Pedidos,Descuento:Descuentos)
+'const COMBO1 =new Combo("Combo 1",1,Descuentode30);
+'COMBO1.AgregarArticulo(Hamburguesita);
+'COMBO1.AgregarArticulo(Coquita);
+
+
+abstract class PrecioCombo{
++abstract CalcularPrecio(Articulo: Articulo[]) 
+'Calcular Precio va a calcular en las clases de abajo por separado el precio final del combo con distintos descuentos.
 }
+
+
+class DescuentoPorcentualCombo{
+-PorcentajeDescuentoCombo: number
+' +CalcularPrecio() Lo implementa o hereda (duda) desde PrecioCombo
+}
+
+'cont Descuentode30 = new DescuentoPorcentualCombo(30)
+'Descuento30.CalcularPrecio()
+
+
+class DescuentoFijoCombo{
+-MontoDescontadoCombo: number
+' +CalcularPrecio() Lo implementa o hereda (duda) desde PrecioCombo
+}
+
+'//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+enum DiaSemana{
+LUNES,
+MARTES, 
+MIERCOLES, 
+JUEVES, 
+VIERNES, 
+SABADO, 
+DOMINGO, 
+}
+
+
+
+enum TipoDeMetodoDePago{
+EFECTIVO,
+TARJETA,
+BILLETERAVIRTUAL,
+}
+
+
+
+abstract class MetodoDePago{
+
+#NombreMetodoDePago: String
+#TipoDeMetodoDePago: TipoDeMetodoDePago
+
+}
+
+
 
 class Efectivo{
-+Cobrar()
+
 }
+
+
 
 class Tarjetas{
-+Cobrar()
+
 }
+
+
 
 class BilleteraVirtual{
-+Cobrar()
-}
-'Relacion
-MetododePago <|-- Efectivo
-MetododePago <|-- Tarjetas
-MetododePago <|-- BilleteraVirtual
 
-
-
-'DEFINIR COMO ELEGIR QUE DESCUENTO APLICAR
-abstract class Descuentos{
 }
 
-class DiaDescuentos{
+
+
+abstract class Descuento{
+#PorcentajeDescuento:number
++EsAplicable(Caja:Caja):boolean 
++CantidadDeDescuento(Cantidad:number):number 
 }
 
-class EfectivoDescuentos{
+
+class DescuentoPorDia{
+-Dia: DiaSemana
++EsAplicable(Caja:Caja):boolean
+ 'return if(this.Caja.Pedido.GetFechaPedido()=== this.Dia);
+'const DescuentoLunes = New DiaDescuentos(DiaSemana.LUNES,20)
 }
 
-<<<<<<< Updated upstream
-Descuentos <|-- DiaDescuentos
-Descuentos <|-- EfectivoDescuentos
-=======
 class DescuentoPorMetodoDePago{
 -MetodoDePago:TipoDeMetodoDePago
 
@@ -244,8 +251,7 @@ class Caja{
 'Va a devolver la competencia entre descuentos creados en las instancias del diadescuento o metododepago establecido con descuento
 'Seguramente se invocando el metodo EsAplicable verificando si es true o false y comparando cual es mas grande
 +CobrarPrecioFinalConDescuento()
-'Va a recibir el monto total del pedido y va a aplicar desde el metodo competencia cual es el porcentaje mas alto y va a descontarselo al total 
-'ademas va a guardar en el atributo de mi pedido MontoFinalCobrado el monto con descuento aplicado.
+'Va a recibir el monto total del pedido y va a aplicar desde el metodo competencia cual es el porcentaje mas alto y va a descontarselo al total
 +GetMetodoDePago()
 +getDiaPedido()
 }
@@ -260,8 +266,30 @@ Pedido o-- Item
 
 Item <|-- Articulo
 Item <|-- Combo
->>>>>>> Stashed changes
 
 
+MetodoDePago <|-- Efectivo
+MetodoDePago <|-- Tarjetas
+MetodoDePago <|-- BilleteraVirtual
+
+Descuento <|-- DescuentoPorMetodoDePago
+Descuento <|-- DescuentoPorDia
+
+PrecioCombo <|-- DescuentoFijoCombo
+PrecioCombo <|-- DescuentoPorcentualCombo
+
+Combo o-- Articulo
+Combo *-- PrecioCombo
+
+Caja o-- MetodoDePago
+Caja o-- Pedido
+Caja o-- Descuento
+
+Estacion -- Pedido
+
+RestauranteForgon o-- Estacion
+RestauranteForgon o-- Pedido
+RestauranteForgon -- Cliente
+RestauranteForgon *-- Caja
 
 @enduml
