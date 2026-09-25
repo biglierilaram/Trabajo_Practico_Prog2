@@ -20,15 +20,25 @@ class RestauranteForgon{
 
 '//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+enum EstadoDePedido{
+    -ENCONSTRUCCION
+    -CONFIRMADO
+    -FINALIZADO
+}
+
 abstract class Pedido{
 #IdPedido
 -FechaPedido: DiaSemana
 -ProductosFinales: Item[]
+-EstadoPedido:EstadoDePedido
 
 +CalcularPrecioTotalPedidoSinDescuentos()
 +AgregarItems()
 +QuitarItems()
 +GetFechaPedido()
++SetMontoFinalCobrado()
++GetMontoFinalCobrado()
++ConfirmarPedido()
 
 }
 
@@ -36,6 +46,7 @@ abstract class Pedido{
 
 class PedidoSalon{
 -NumerodeMesa: number
+
 }
 
 
@@ -58,14 +69,21 @@ class PedidoEnvio{
 
 
 '//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-' duda: seria estadoPedido o podria ser EstadoItem (si es que quedo como los platos individuales), Pedido no seria ya el plato completo armado
-' y el estado lo tendria q tener cada item por separado? 
+enum TipoDeEstacion{
+    -
+    -
+    -
+    -
+}
+
 class Estacion{
 
 -NombreEstacion
+-TipoDeEstacion: TipoDeEstacion
+-Pedido: Pedido
 
-+RecibirPedido(Pedido:Pedido)
-+EstadoPedido()
+
++CambiarEstadoItemAListo()
 
 }
 
@@ -81,6 +99,7 @@ abstract class Item{
 'this.ID = ID}
 
 +abstract PrecioFinal():number
++
 }
 
 
@@ -93,10 +112,11 @@ POSTRE,
 }
 
 
-
+'FALTARIA ESTADO DE ARTICULO PARA QUE LA ESTACION VAYA CAMBIANDOLO DESPUES
 class Articulo{
 -PrecioArticulo : Number
 -Categoria : Categoria
+-Estacion: TipoDeEstacion
 'A CHECKEAR
 'constructor(PrecioArticulo:PrecioArticulo, Categoria: Categoria){
 '    super(Nombre,ID);
@@ -104,7 +124,7 @@ class Articulo{
 '    this.Categoria = Categoria}
 
 +PrecioFinal()
-'return this.PrecioArticulo
++GetEstacion()
 }
 
 'const Hamburguesita = new Articulo("Hamburguesa",12,9000,Categoria.PLATOPRINCIPAL);
@@ -124,7 +144,7 @@ class Combo{
 +AgregarArticulo()
 'this.Articulos.push(articulo);
 +PrecioFinal()
-'No tan claro como funciona este metodo en Combos
++GetArticulos()
 }
 
 
