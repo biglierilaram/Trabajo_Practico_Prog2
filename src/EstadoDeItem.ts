@@ -1,0 +1,5 @@
+export enum EstadoDeItem {
+  PENDIENTE = 'PENDIENTE',
+  ENPREPARACION = 'ENPREPARACION',
+  LISTO = 'LISTO',
+}

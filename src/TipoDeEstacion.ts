@@ -1,0 +1,6 @@
+export enum TipoDeEstacion {
+  PARRILLA = 'PARRILLA',
+  COCINAFRIA = 'COCINAFRIA',
+  BARRA = 'BARRA',
+  COCINADULCE = 'COCINADULCE',
+}
