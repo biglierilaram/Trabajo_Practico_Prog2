@@ -70,10 +70,10 @@ class PedidoEnvio{
 
 '//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 enum TipoDeEstacion{
-    -
-    -
-    -
-    -
+    -Parrilla
+    -Barra
+    -CocinaFria
+    -CocinaDulce
 }
 
 class Estacion{
@@ -82,6 +82,11 @@ class Estacion{
 -TipoDeEstacion: TipoDeEstacion
 -Pedido: Pedido
 
+enum EstadoDeItem{
+  -PENDIENTE
+  -ENPREPARACION
+  -LISTO
+}
 
 +CambiarEstadoItemAListo()
 
