@@ -1,0 +1,31 @@
+export enum Categoria {
+ENTRADA,
+PLATOPRINCIPAL,
+BEBIDA,
+POSTRE
+}
+
+export enum TipoDeEstacion {
+CARNES,
+ENSALADAS,
+POSTRES,
+BARRA
+}
+
+
+export enum DiaSemana {
+LUNES,
+MARTES,
+MIERCOLES,
+JUEVES,
+VIERNES,
+SABADO,
+DOMINGO
+}
+
+export enum TipoDeMetodoDePago{
+EFECTIVO,
+TARJETA,
+BILLETERAVIRTUAL
+}
+

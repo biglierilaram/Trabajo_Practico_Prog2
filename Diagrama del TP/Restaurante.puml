@@ -20,9 +20,9 @@ class RestauranteForgon{
 
 '//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-abstract class Pedido{
+class Pedido{
 #IdPedido
--FechaPedido: DiaSemana
+-FechaPedido: Date
 -ProductosFinales: Item[]
 
 +CalcularPrecioTotalPedidoSinDescuentos()
@@ -180,6 +180,8 @@ abstract class MetodoDePago{
 #NombreMetodoDePago: String
 #TipoDeMetodoDePago: TipoDeMetodoDePago
 
++GetMetodoDePago():string
++GetTipoDeMetodoDePago(): TipoDeMetodoDePago
 }
 
 
@@ -203,37 +205,43 @@ class BilleteraVirtual{
 
 
 abstract class Descuento{
+
 #PorcentajeDescuento:number
-+EsAplicable(Caja:Caja):boolean 
-+CantidadDeDescuento(Cantidad:number):number 
+
++EsAplicable():boolean 
++CantidadDeDescuento():number 
++GetPorcentajeDescuento():number
++AplicarDescuento():number
+
 }
 
 
 class DescuentoPorDia{
+
 -Dia: DiaSemana
-+EsAplicable(Caja:Caja):boolean
- 'return if(this.Caja.Pedido.GetFechaPedido()=== this.Dia);
-'const DescuentoLunes = New DiaDescuentos(DiaSemana.LUNES,20)
+
++EsAplicable():boolean
+
 }
 
 class DescuentoPorMetodoDePago{
+
 -MetodoDePago:TipoDeMetodoDePago
 
-+EsAplicable(Caja:Caja):boolean
-'return if(this.Caja.GetMetodoDePago === This.MetodoDePago.TipoDeMetodoDePago)
++EsAplicable():boolean
+
 }
 
 class Caja{
+
 -Pedidos: Pedido
 -MetodoDePago: MetodoDePago
 
-+CompetenciaDeDescuentos(efectivo: Descuento, dia:Descuento)
-'Va a devolver la competencia entre descuentos creados en las instancias del diadescuento o metododepago establecido con descuento
-'Seguramente se invocando el metodo EsAplicable verificando si es true o false y comparando cual es mas grande
++CompetenciaDeDescuentos()
 +CobrarPrecioFinalConDescuento()
-'Va a recibir el monto total del pedido y va a aplicar desde el metodo competencia cual es el porcentaje mas alto y va a descontarselo al total
 +GetMetodoDePago()
 +getDiaPedido()
+
 }
 
 '////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
