@@ -6,8 +6,8 @@
   "scripts": {
     "build": "npm run lint && tsc",
     "clean": "npm run clean:build && npm run clean:temp",
-    "clean:build": "npx rimraf ./dist",
-    "clean:temp": "npx rimraf ./tmp",
+    "clean:build": "node -e \"require('fs').rmSync('./dist', {recursive:true, force:true})\"",
+    "clean:temp": "node -e \"require('fs').rmSync('./tmp', {recursive:true, force:true})\"",
     "dev-mode": "ts-node ./src/index.ts",
     "lint": "npx eslint ./src",
     "start": "node ./dist/index.js",
