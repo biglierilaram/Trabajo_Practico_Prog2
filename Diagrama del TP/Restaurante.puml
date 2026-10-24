@@ -1,53 +1,58 @@
-@startuml
+@startuml Restaurante
 
 title Forgon del Barrio.
 
 class Cliente{
 -Nombre
 -Apellido
+
 }
 
+'//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-abstract class Pedido{
+class RestauranteForgon{
+-Nombre
+-HistorialPedidos: Pedido[]
+
++GuardarHistorialPedido()
+
+}
+
+'//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class Pedido{
 #IdPedido
--FechaPedido
--MontoTotal
--PlatoPedido(Item,Combo)
+-FechaPedido: Date
+-ProductosFinales: Item[]
 
-
--TipoDePedido()
--ModificarPedido()
++CalcularPrecioTotalPedidoSinDescuentos()
++AgregarItems()
++QuitarItems()
++GetFechaPedido()
 
 }
 
-' Relaciones
-Pedidos <|-- PedidoSalon
-Pedidos <|-- PedidoRetirar
-Pedidos <|--PedidoEnvio
+
 
 class PedidoSalon{
--NumerodeMesa
-
+-NumerodeMesa: number
 }
+
+
 
 class PedidoRetirar{
--HorarioDeRetiro
+-HorarioDeRetiro: string
 
 }
+
+
 
 class PedidoEnvio{
--DomicilioPedido
--CostodeEnvio
+-DomicilioPedido : string
+-CostodeEnvio : number
 }
 
-' CADETE QUE ES? TIENE OBRA SOCIAL?
-
-
-' CADETE QUE ES? TIENE OBRA SOCIAL?
-
-
-
-
+'//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class Estacion{
 
@@ -58,139 +63,215 @@ class Estacion{
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+'//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 'PADRE DE ARTICULO Y COMBO
 abstract class Item{
 #Nombre: String
 #ID: number
-
 'A CHECKEAR
 'constructor(Nombre:String,ID:number){'
 'this.Nombre = Nombre
 'this.ID = ID}
 
-+PrecioFinal()
++abstract PrecioFinal():number
 }
 
 
-class Articulo extends Item{
+
+enum Categoria{
+ENTRADA,
+PLATOPRINCIPAL,
+BEBIDA,
+POSTRE,
+}
+
+
+
+class Articulo{
 -PrecioArticulo : Number
 -Categoria : Categoria
-
 'A CHECKEAR
 'constructor(PrecioArticulo:PrecioArticulo, Categoria: Categoria){
 '    super(Nombre,ID);
 '    this.PrecioArticulo = PrecioArticulo
 '    this.Categoria = Categoria}
 
-
++PrecioFinal()
+'return this.PrecioArticulo
 }
 
+'const Hamburguesita = new Articulo("Hamburguesa",12,9000,Categoria.PLATOPRINCIPAL);
+'Hamburguesita.PrecioFinal(); (Retorna 9k)
+'const Coquita = new Articulo ("Coquita",13,5000,Categoria.BEBIDA);
 
-class Combo extends Item{
 
+class Combo{
 -PrecioCombo : PrecioCombo
 -Articulos :Articulo[]
--CantidadArticulos : number
+'constructor(){
+'super('Parametros);
+'this.PrecioCombo=PrecioCombo
+'this.Articulos: [];
+'}
 
-''+Armarcombo();
-
++AgregarArticulo()
+'this.Articulos.push(articulo);
++PrecioFinal()
+'No tan claro como funciona este metodo en Combos
 }
 
-enum Categoria{
--ENTRADA
--PLATOPRINCIPAL
--BEBIDA
--POSTRE
-}
 
 
-Interface PrecioCombo{
-+CalcularPrecio(Articulo: Articulo[]); 
+'const COMBO1 =new Combo("Combo 1",1,Descuentode30);
+'COMBO1.AgregarArticulo(Hamburguesita);
+'COMBO1.AgregarArticulo(Coquita);
+
+
+abstract class PrecioCombo{
++abstract CalcularPrecio(Articulo: Articulo[])
 'Calcular Precio va a calcular en las clases de abajo por separado el precio final del combo con distintos descuentos.
 }
 
-class DescuentoPorcentual implements PrecioCombo{
--PorcentajeDescuento: number
-' +CalcularPrecio() Lo implementa desde PrecioCombo
+
+class DescuentoPorcentualCombo{
+-PorcentajeDescuentoCombo: number
+' +CalcularPrecio() Lo implementa o hereda (duda) desde PrecioCombo
 }
 
-class DescuentoFijo implements PrecioCombo{
--MontoDescontado: number
-' +CalcularPrecio() Lo implementa desde PrecioCombo
+'cont Descuentode30 = new DescuentoPorcentualCombo(30)
+'Descuento30.CalcularPrecio()
+
+
+class DescuentoFijoCombo{
+-MontoDescontadoCombo: number
+' +CalcularPrecio() Lo implementa o hereda (duda) desde PrecioCombo
+}
+
+'//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+enum DiaSemana{
+LUNES,
+MARTES,
+MIERCOLES,
+JUEVES,
+VIERNES,
+SABADO,
+DOMINGO,
 }
 
 
-'Relaciones
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-abstract class MetodoPago{
-+Cobrar(Monto:Pedidos,Descuento:Descuentos)
+enum TipoDeMetodoDePago{
+EFECTIVO,
+TARJETA,
+BILLETERAVIRTUAL,
 }
+
+
+
+abstract class MetodoDePago{
+
+#NombreMetodoDePago: String
+#TipoDeMetodoDePago: TipoDeMetodoDePago
+
++GetMetodoDePago():string
++GetTipoDeMetodoDePago(): TipoDeMetodoDePago
+}
+
+
 
 class Efectivo{
-+Cobrar()
+
 }
+
+
 
 class Tarjetas{
-+Cobrar()
+
 }
+
+
 
 class BilleteraVirtual{
-+Cobrar()
-}
-'Relacion
-MetododePago <|-- Efectivo
-MetododePago <|-- Tarjetas
-MetododePago <|-- BilleteraVirtual
 
-
-
-'DEFINIR COMO ELEGIR QUE DESCUENTO APLICAR
-abstract class Descuentos{
 }
 
-class DiaDescuentos{
+
+
+abstract class Descuento{
+
+#PorcentajeDescuento:number
+
++EsAplicable():boolean
++CantidadDeDescuento():number
++GetPorcentajeDescuento():number
++AplicarDescuento():number
+
 }
 
-class EfectivoDescuentos{
+
+class DescuentoPorDia{
+
+-Dia: DiaSemana
+
++EsAplicable():boolean
+
 }
 
-Descuentos <|-- DiaDescuentos
-Descuentos <|-- EfectivoDescuentos
+class DescuentoPorMetodoDePago{
+
+-MetodoDePago:TipoDeMetodoDePago
+
++EsAplicable():boolean
+
+}
+
+class Caja{
+
+-Pedidos: Pedido
+-MetodoDePago: MetodoDePago
+
++CompetenciaDeDescuentos()
++CobrarPrecioFinalConDescuento()
++GetMetodoDePago()
++getDiaPedido()
+
+}
+
+'////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+' Relaciones
+
+Pedido <|-- PedidoEnvio
+Pedido <|-- PedidoRetirar
+Pedido <|-- PedidoSalon
+Pedido o-- Item
+
+Item <|-- Articulo
+Item <|-- Combo
 
 
+MetodoDePago <|-- Efectivo
+MetodoDePago <|-- Tarjetas
+MetodoDePago <|-- BilleteraVirtual
+
+Descuento <|-- DescuentoPorMetodoDePago
+Descuento <|-- DescuentoPorDia
+
+PrecioCombo <|-- DescuentoFijoCombo
+PrecioCombo <|-- DescuentoPorcentualCombo
+
+Combo o-- Articulo
+Combo *-- PrecioCombo
+
+Caja o-- MetodoDePago
+Caja o-- Pedido
+Caja o-- Descuento
+
+Estacion -- Pedido
+
+RestauranteForgon o-- Estacion
+RestauranteForgon o-- Pedido
+RestauranteForgon -- Cliente
+RestauranteForgon *-- Caja
 
 @enduml
