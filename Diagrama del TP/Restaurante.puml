@@ -129,11 +129,7 @@ class Combo{
 
 
 abstract class PrecioCombo{
-<<<<<<< HEAD
-+abstract CalcularPrecio(Articulo: Articulo[]) 
-=======
 +abstract CalcularPrecio(Articulo: Articulo[])
->>>>>>> german-peini
 'Calcular Precio va a calcular en las clases de abajo por separado el precio final del combo con distintos descuentos.
 }
 
@@ -156,23 +152,13 @@ class DescuentoFijoCombo{
 
 enum DiaSemana{
 LUNES,
-<<<<<<< HEAD
-MARTES, 
-MIERCOLES, 
-JUEVES, 
-VIERNES, 
-SABADO, 
-DOMINGO, 
-=======
 MARTES,
 MIERCOLES,
 JUEVES,
 VIERNES,
 SABADO,
 DOMINGO,
->>>>>>> german-peini
 }
-
 
 
 enum TipoDeMetodoDePago{
@@ -216,13 +202,8 @@ abstract class Descuento{
 
 #PorcentajeDescuento:number
 
-<<<<<<< HEAD
-+EsAplicable():boolean 
-+CantidadDeDescuento():number 
-=======
 +EsAplicable():boolean
 +CantidadDeDescuento():number
->>>>>>> german-peini
 +GetPorcentajeDescuento():number
 +AplicarDescuento():number
 
@@ -292,9 +273,5 @@ RestauranteForgon o-- Estacion
 RestauranteForgon o-- Pedido
 RestauranteForgon -- Cliente
 RestauranteForgon *-- Caja
-<<<<<<< HEAD
 
 @enduml
-=======
->>>>>>> german-peini
-
