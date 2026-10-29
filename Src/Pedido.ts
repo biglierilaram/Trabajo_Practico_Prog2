@@ -1,34 +1,46 @@
 import { DiaSemana } from "./Enums";
 import { Item } from "./Item";
 
-
 export class Pedido {
-protected IdPedido : number ;
-private DiaDePedido : DiaSemana ;
-private ProductosFinales: Item[] ;
+    private static readonly itemNoEncontrado: number = -1;
+    private static readonly cantidadItemsAEliminar: number = 1;
 
-constructor(IdPedido:number, DiaDePedido: DiaSemana){
-    this.IdPedido = IdPedido;
-    this.DiaDePedido= DiaDePedido;
-    this.ProductosFinales= []
-}
+    protected idPedido: number;
+    private diaDePedido: DiaSemana;
+    private productosFinales: Item[];
 
-public calcularPrecioTotalPedidoSinDescuentos(): number {
-    let precioTotal: number = 0;
-
-    for (const item of this.ProductosFinales) {
-        precioTotal += item.precioFinal();
+    public constructor(idPedido: number, diaDePedido: DiaSemana) {
+        this.idPedido = idPedido;
+        this.diaDePedido = diaDePedido;
+        this.productosFinales = [];
     }
 
-    return precioTotal;
-}
+    public calcularPrecioTotalPedidoSinDescuentos(): number {
+        let precioTotal: number = 0;
 
+        for (const item of this.productosFinales) {
+            precioTotal += item.precioFinal();
+        }
 
-public AgregarItems(item: Item) : void {
-    this.ProductosFinales.push(item);
-};
+        return precioTotal;
+    }
 
-public QuitarITem(item: Item) : void {}; //falta desarrollar
+    public agregarItems(item: Item): void {
+        this.productosFinales.push(item);
+    }
 
-public GetFechaPedido () : DiaSemana { return this.DiaDePedido};
+    public quitarItem(item: Item): void {
+        const indice: number = this.productosFinales.indexOf(item);
+
+        if (indice !== Pedido.itemNoEncontrado) {
+            this.productosFinales.splice(
+                indice,
+                Pedido.cantidadItemsAEliminar
+            );
+        }
+    }
+
+    public getFechaPedido(): DiaSemana {
+        return this.diaDePedido;
+    }
 }

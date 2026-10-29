@@ -1,10 +1,11 @@
 import { MetodoDePago } from "./MetodoDePago";
 import { TipoDeMetodoDePago } from "./Enums";
 
-export class Tarjetas extends MetodoDePago{
-
-constructor(NombreMetodoDePago: string, TipoDeMetodoDePago: TipoDeMetodoDePago){
-    super(NombreMetodoDePago, TipoDeMetodoDePago);
-};
-
+export class Tarjetas extends MetodoDePago {
+    public constructor(
+        nombreMetodoDePago: string,
+        tipoDeMetodoDePago: TipoDeMetodoDePago
+    ) {
+        super(nombreMetodoDePago, tipoDeMetodoDePago);
+    }
 }

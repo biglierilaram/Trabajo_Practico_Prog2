@@ -23,7 +23,7 @@ SABADO,
 DOMINGO
 }
 
-export enum TipoDeMetodoDePago{
+export enum TipoDeMetodoDePago {
 EFECTIVO,
 TARJETA,
 BILLETERAVIRTUAL

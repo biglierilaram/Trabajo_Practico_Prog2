@@ -1,26 +1,28 @@
-import { Pedido } from "./Pedido";
+
 import { Caja } from "./Caja";
 
+const DIVISOR_PORCENTUAL: number = 100;
+
 export abstract class Descuento {
-protected PorcentajeDescuento : number ;
+    protected porcentajeDescuento: number;
 
-constructor(PorcentajeDescuento: number){
-    this.PorcentajeDescuento= PorcentajeDescuento;
-}
-
-public abstract esAplicable(condicion : Caja): boolean;
-
-public CantidadDeDescuento(cantidad: number):number{
-    return cantidad * this.PorcentajeDescuento/100;
-}
-
-public GetPorcentajeDescuento():number {return this.PorcentajeDescuento} ;
-
-public AplicarDescuento(precio: number): number {
-        return precio - (precio * this.PorcentajeDescuento / 100);
+    public constructor(porcentajeDescuento: number) {
+        this.porcentajeDescuento = porcentajeDescuento;
     }
 
+    public abstract esAplicable(condicion: Caja): boolean;
 
+    public cantidadDeDescuento(cantidad: number): number {
+        return cantidad * this.porcentajeDescuento / DIVISOR_PORCENTUAL;
+    }
 
+    public getPorcentajeDescuento(): number {
+        return this.porcentajeDescuento;
+    }
 
+    public aplicarDescuento(precio: number): number {
+        return precio - (
+            precio * this.porcentajeDescuento / DIVISOR_PORCENTUAL
+        );
+    }
 }

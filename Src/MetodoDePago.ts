@@ -1,17 +1,22 @@
 import { TipoDeMetodoDePago } from "./Enums";
 
-export abstract class MetodoDePago{
-protected NombreMetodoDePago: string ;
-protected TipoDeMetodoDePago: TipoDeMetodoDePago ;
+export abstract class MetodoDePago {
+    protected nombreMetodoDePago: string;
+    protected tipoDeMetodoDePago: TipoDeMetodoDePago;
 
-constructor(NombreMetodoDePago: string, TipoDeMetodoDePago: TipoDeMetodoDePago){
-this.NombreMetodoDePago= NombreMetodoDePago
-this.TipoDeMetodoDePago= TipoDeMetodoDePago
-}
+    public constructor(
+        nombreMetodoDePago: string,
+        tipoDeMetodoDePago: TipoDeMetodoDePago
+    ) {
+        this.nombreMetodoDePago = nombreMetodoDePago;
+        this.tipoDeMetodoDePago = tipoDeMetodoDePago;
+    }
 
-public GetMetodoDePago(): string {
-    return this.NombreMetodoDePago } ;
+    public getMetodoDePago(): string {
+        return this.nombreMetodoDePago;
+    }
 
-public GetTipoDeMetodoDePago():TipoDeMetodoDePago {
-    return this.TipoDeMetodoDePago } ;
+    public getTipoDeMetodoDePago(): TipoDeMetodoDePago {
+        return this.tipoDeMetodoDePago;
+    }
 }

@@ -1,43 +1,49 @@
-import { Pedido } from "./Pedido"
+import { Pedido } from "./Pedido";
 import { MetodoDePago } from "./MetodoDePago";
-import {Descuento} from "./Descuento" ;
-import {DiaSemana, TipoDeMetodoDePago } from "./Enums";
+import { Descuento } from "./Descuento";
+import { DiaSemana, TipoDeMetodoDePago } from "./Enums";
 
 export class Caja {
-private Pedidos: Pedido ;
-private MetodoDePago : MetodoDePago ;
+    private pedidos: Pedido;
+    private metodoDePago: MetodoDePago;
 
-constructor(Pedidos:Pedido, MetodoDePago: MetodoDePago){
-    this.Pedidos= Pedidos;
-    this.MetodoDePago= MetodoDePago ;
-}
+    public constructor(pedidos: Pedido, metodoDePago: MetodoDePago) {
+        this.pedidos = pedidos;
+        this.metodoDePago = metodoDePago;
+    }
 
-public CompetenciaDeDescuentos(descuento: Descuento [], precio: number) : number {
+    public competenciaDeDescuentos(
+        descuentos: Descuento[],
+        precio: number
+    ): number {
+        let mejorPrecio: number = precio;
 
-    let mejorPrecio: number = precio;
+        for (const descuento of descuentos) {
+            if (
+                descuento.esAplicable(this) &&
+                descuento.aplicarDescuento(precio) < mejorPrecio
+            ) {
+                mejorPrecio = descuento.aplicarDescuento(precio);
+            }
+        }
 
-    for (const Descuento of descuento) {
-        if ( /*this hace referencia a la instancia que se va a usar en el momento*/
-            Descuento.esAplicable(this) &&
-            Descuento.AplicarDescuento(precio) < mejorPrecio )
-            { mejorPrecio = Descuento.AplicarDescuento(precio); } }
+        return mejorPrecio;
+    }
 
-    return mejorPrecio;
-}
+    public cobrarPrecioFinalConDescuento(
+        descuentos: Descuento[]
+    ): number {
+        const precio: number =
+            this.pedidos.calcularPrecioTotalPedidoSinDescuentos();
 
-public CobrarPrecioFinalConDescuento(descuentos: Descuento[]): number {
+        return this.competenciaDeDescuentos(descuentos, precio);
+    }
 
-    const precio: number = this.Pedidos.calcularPrecioTotalPedidoSinDescuentos();
+    public getMetodoDePago(): TipoDeMetodoDePago {
+        return this.metodoDePago.getTipoDeMetodoDePago();
+    }
 
-    return this.CompetenciaDeDescuentos(descuentos, precio);
-}
-
-
-public GetMetodoDePago() : TipoDeMetodoDePago {
-    return this.MetodoDePago.GetTipoDeMetodoDePago() } ;
-
-public GetDiaPedido(): DiaSemana {
-    return this.Pedidos.GetFechaPedido() }  ;
-
-
+    public getDiaPedido(): DiaSemana {
+        return this.pedidos.getFechaPedido();
+    }
 }

@@ -1,10 +1,11 @@
 import { MetodoDePago } from "./MetodoDePago";
 import { TipoDeMetodoDePago } from "./Enums";
 
-export class BilleteraVirtual extends MetodoDePago{
-
-constructor(NombreMetodoDePago: string, TipoDeMetodoDePago: TipoDeMetodoDePago){
-    super(NombreMetodoDePago, TipoDeMetodoDePago);
-};
-
+export class BilleteraVirtual extends MetodoDePago {
+    public constructor(
+        nombreMetodoDePago: string,
+        tipoDeMetodoDePago: TipoDeMetodoDePago
+    ) {
+        super(nombreMetodoDePago, tipoDeMetodoDePago);
+    }
 }
