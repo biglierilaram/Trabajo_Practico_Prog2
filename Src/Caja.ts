@@ -19,11 +19,13 @@ export class Caja {
         let mejorPrecio: number = precio;
 
         for (const descuento of descuentos) {
-            if (
-                descuento.esAplicable(this) &&
-                descuento.aplicarDescuento(precio) < mejorPrecio
-            ) {
-                mejorPrecio = descuento.aplicarDescuento(precio);
+            if (descuento.esAplicable(this)) {
+                const precioConDescuento: number =
+                    descuento.aplicarDescuento(precio);
+
+                if (precioConDescuento < mejorPrecio) {
+                    mejorPrecio = precioConDescuento;
+                }
             }
         }
 
