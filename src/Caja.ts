@@ -35,6 +35,12 @@ export class Caja {
     public cobrarPrecioFinalConDescuento(
         descuentos: Descuento[]
     ): number {
+        if (!this.pedidos.estanTodosLosItemsListos()) {
+            throw new Error(
+                "No se puede facturar un pedido hasta que todos sus ítems estén listos."
+            );
+        }
+
         const precio: number =
             this.pedidos.calcularPrecioTotalPedidoSinDescuentos();
 

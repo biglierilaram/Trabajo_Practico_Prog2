@@ -10,7 +10,9 @@ import {
     TipoDeEstacion,
     TipoDeMetodoDePago
 } from "./Enums";
-import { Pedido } from "./Pedido";
+import { PedidoSalon } from "./PedidoSalon";
+import { Estacion } from "./Estacion";
+import { Restaurante } from "./Restaurante";
 
 const PORCENTAJE_DESCUENTO_MARTES: number = 15;
 const PORCENTAJE_DESCUENTO_EFECTIVO: number = 10;
@@ -71,15 +73,58 @@ const torta1 = new Articulo(
 );
 
 // Creo el pedido y agrego los artículos.
-const pedido1 = new Pedido(ID_PEDIDO, DiaSemana.MARTES);
+const NUMERO_DE_MESA: number = 5;
+
+const pedido1 = new PedidoSalon(
+    ID_PEDIDO,
+    DiaSemana.MARTES,
+    NUMERO_DE_MESA
+);
 
 pedido1.agregarItems(ensalada);
 pedido1.agregarItems(aguaSinGas);
 pedido1.agregarItems(torta1);
 
 // Creo la caja y calculo el importe con el descuento más beneficioso.
+// Confirmo el pedido.
+pedido1.confirmar();
+
+// Creo las estaciones de cocina.
+const estacionEnsaladas = new Estacion(
+    TipoDeEstacion.ENSALADAS
+);
+
+const estacionBarra = new Estacion(
+    TipoDeEstacion.BARRA
+);
+
+const estacionPostres = new Estacion(
+    TipoDeEstacion.POSTRES
+);
+
+// Distribuyo los artículos en sus estaciones correspondientes.
+estacionEnsaladas.recibirItem(ensalada);
+estacionBarra.recibirItem(aguaSinGas);
+estacionPostres.recibirItem(torta1);
+
+// Preparo y finalizo el artículo de ensaladas.
+estacionEnsaladas.iniciarSiguienteItem();
+estacionEnsaladas.finalizarItemActual();
+
+// Preparo y finalizo el artículo de barra.
+estacionBarra.iniciarSiguienteItem();
+estacionBarra.finalizarItemActual();
+
+// Preparo y finalizo el postre.
+estacionPostres.iniciarSiguienteItem();
+estacionPostres.finalizarItemActual();
+
+// Creo la caja y calculo el importe con el descuento más beneficioso.
 const caja = new Caja(pedido1, efectivo);
-console.log(caja.cobrarPrecioFinalConDescuento(descuentosVigentes));
+
+console.log(
+    caja.cobrarPrecioFinalConDescuento(descuentosVigentes)
+);
 
 // El precio total es 29.700.
 // El descuento del martes es del 15% y el de efectivo del 10%.
