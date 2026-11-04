@@ -17,6 +17,10 @@ export abstract class Pedido {
         this.estado = EstadoPedido.EN_CONSTRUCCION;
     }
 
+    public getIdPedido(): number {
+        return this.idPedido;
+    }
+
     public calcularPrecioTotalPedidoSinDescuentos(): number {
         let precioTotal: number = 0;
 
@@ -34,6 +38,10 @@ export abstract class Pedido {
 
     public getItems(): Item[] {
         return [...this.productosFinales];
+    }
+
+    protected quitarUltimoItem(): void {
+        this.productosFinales.pop();
     }
 
     public quitarItem(item: Item): void {
