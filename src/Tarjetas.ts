@@ -1,10 +1,21 @@
 import { MetodoDePago } from "./MetodoDePago";
 import { TipoDeMetodoDePago } from "./Enums";
 
-export class Tarjetas extends MetodoDePago{
+/**
+ * Representa el pago realizado mediante tarjeta.
+ */
+export class Tarjetas extends MetodoDePago {
 
-constructor(NombreMetodoDePago: string, TipoDeMetodoDePago: TipoDeMetodoDePago){
-    super(NombreMetodoDePago, TipoDeMetodoDePago);
-};
-
+    /**
+     * Crea un método de pago con tarjeta.
+     *
+     * @param nombreMetodoDePago Nombre del método de pago.
+     * @param tipoDeMetodoDePago Tipo de método de pago.
+     */
+    public constructor(
+        nombreMetodoDePago: string,
+        tipoDeMetodoDePago: TipoDeMetodoDePago
+    ) {
+        super(nombreMetodoDePago, tipoDeMetodoDePago);
+    }
 }

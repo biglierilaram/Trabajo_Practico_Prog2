@@ -1,10 +1,21 @@
 import { MetodoDePago } from "./MetodoDePago";
 import { TipoDeMetodoDePago } from "./Enums";
 
-export class BilleteraVirtual extends MetodoDePago{
+/**
+ * Representa el pago realizado mediante una billetera virtual.
+ */
+export class BilleteraVirtual extends MetodoDePago {
 
-constructor(NombreMetodoDePago: string, TipoDeMetodoDePago: TipoDeMetodoDePago){
-    super(NombreMetodoDePago, TipoDeMetodoDePago);
-};
-
+    /**
+     * Crea un método de pago con billetera virtual.
+     *
+     * @param nombreMetodoDePago Nombre del método de pago.
+     * @param tipoDeMetodoDePago Tipo de método de pago.
+     */
+    public constructor(
+        nombreMetodoDePago: string,
+        tipoDeMetodoDePago: TipoDeMetodoDePago
+    ) {
+        super(nombreMetodoDePago, tipoDeMetodoDePago);
+    }
 }

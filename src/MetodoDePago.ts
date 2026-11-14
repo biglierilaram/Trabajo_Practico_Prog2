@@ -1,17 +1,43 @@
 import { TipoDeMetodoDePago } from "./Enums";
 
-export abstract class MetodoDePago{
-protected NombreMetodoDePago: string ;
-protected TipoDeMetodoDePago: TipoDeMetodoDePago ;
+/**
+ * Clase abstracta que representa un método de pago.
+ *
+ * Define el nombre y el tipo de método de pago utilizado.
+ */
+export abstract class MetodoDePago {
+    protected nombreMetodoDePago: string;
+    protected tipoDeMetodoDePago: TipoDeMetodoDePago;
 
-constructor(NombreMetodoDePago: string, TipoDeMetodoDePago: TipoDeMetodoDePago){
-this.NombreMetodoDePago= NombreMetodoDePago
-this.TipoDeMetodoDePago= TipoDeMetodoDePago
-}
+    /**
+     * Crea un método de pago.
+     *
+     * @param nombreMetodoDePago Nombre del método de pago.
+     * @param tipoDeMetodoDePago Tipo de método de pago.
+     */
+    public constructor(
+        nombreMetodoDePago: string,
+        tipoDeMetodoDePago: TipoDeMetodoDePago
+    ) {
+        this.nombreMetodoDePago = nombreMetodoDePago;
+        this.tipoDeMetodoDePago = tipoDeMetodoDePago;
+    }
 
-public GetMetodoDePago(): string {
-    return this.NombreMetodoDePago } ;
+    /**
+     * Obtiene el nombre del método de pago.
+     *
+     * @returns Nombre del método de pago.
+     */
+    public getMetodoDePago(): string {
+        return this.nombreMetodoDePago;
+    }
 
-public GetTipoDeMetodoDePago():TipoDeMetodoDePago {
-    return this.TipoDeMetodoDePago } ;
+    /**
+     * Obtiene el tipo de método de pago.
+     *
+     * @returns Tipo de método de pago.
+     */
+    public getTipoDeMetodoDePago(): TipoDeMetodoDePago {
+        return this.tipoDeMetodoDePago;
+    }
 }
