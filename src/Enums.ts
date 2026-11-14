@@ -1,3 +1,6 @@
+/**
+ * Categorías disponibles para los artículos del restaurante.
+ */
 export enum Categoria {
     ENTRADA,
     PLATOPRINCIPAL,
@@ -5,6 +8,9 @@ export enum Categoria {
     POSTRE
 }
 
+/**
+ * Tipos de estaciones de preparación del restaurante.
+ */
 export enum TipoDeEstacion {
     CARNES,
     ENSALADAS,
@@ -12,7 +18,9 @@ export enum TipoDeEstacion {
     BARRA
 }
 
-
+/**
+ * Días de la semana utilizados para identificar la fecha de un pedido.
+ */
 export enum DiaSemana {
     LUNES,
     MARTES,
@@ -23,18 +31,27 @@ export enum DiaSemana {
     DOMINGO
 }
 
+/**
+ * Tipos de métodos de pago disponibles.
+ */
 export enum TipoDeMetodoDePago {
     EFECTIVO,
     TARJETA,
     BILLETERAVIRTUAL
 }
 
+/**
+ * Estados posibles de un artículo durante su preparación.
+ */
 export enum EstadoItem {
     PENDIENTE,
     EN_PREPARACION,
     LISTO
 }
 
+/**
+ * Estados posibles de un pedido.
+ */
 export enum EstadoPedido {
     EN_CONSTRUCCION,
     CONFIRMADO

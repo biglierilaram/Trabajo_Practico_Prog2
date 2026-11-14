@@ -1,270 +1,292 @@
 @startuml Restaurante
 
-title Forgon del Barrio.
+title Gestión de pedidos - Restaurante
 
-class Cliente{
--Nombre
--Apellido
+skinparam classAttributeIconSize 0
+hide empty members
 
+' ==================================================
+' PEDIDOS
+' ==================================================
+
+abstract class Pedido {
+    #idPedido: number
+    #diaDePedido: DiaSemana
+    #productosFinales: Item[]
+    #estado: EstadoPedido
+
+    +constructor(idPedido: number, diaDePedido: DiaSemana)
+    +agregarItems(item: Item): void
+    +quitarItem(item: Item): void
+    +confirmar(): void
+    +estaConfirmado(): boolean
+    +calcularPrecioTotalPedidoSinDescuentos(): number
+    +estanTodosLosItemsListos(): boolean
+    +getDiaDePedido(): DiaSemana
+    +getIdPedido(): number
+    +getItems(): Item[]
 }
 
-'//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-class RestauranteForgon{
--Nombre
--HistorialPedidos: Pedido[]
-
-+GuardarHistorialPedido()
-
+class PedidoSalon {
+    -numeroDeMesa: number
+    +getNumeroDeMesa(): number
+    +quitarItemsHasta(item: Item): void
 }
 
-'//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-class Pedido{
-#IdPedido
--FechaPedido: Date
--ProductosFinales: Item[]
-
-+CalcularPrecioTotalPedidoSinDescuentos()
-+AgregarItems()
-+QuitarItems()
-+GetFechaPedido()
-
+class PedidoRetirar {
+    -horarioDeRetiro: string
+    +getHorarioDeRetiro(): string
+    +quitarItemsHasta(item: Item): void
 }
 
-
-
-class PedidoSalon{
--NumerodeMesa: number
+class PedidoEnvio {
+    -domicilioPedido: string
+    -costoDeEnvio: number
+    +getDomicilioPedido(): string
+    +getCostoDeEnvio(): number
 }
 
-class PedidoRetirar{
--HorarioDeRetiro: string
-
-}
-
-class PedidoEnvio{
--DomicilioPedido : string
--CostodeEnvio : number
-}
-
-'//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-class Estacion{
-
--NombreEstacion
-
-+RecibirPedido(Pedido:Pedidos)
-+EstadoPedido()
-
-}
-
-'//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-'PADRE DE ARTICULO Y COMBO
-abstract class Item{
-#Nombre: String
-#ID: number
-'A CHECKEAR
-'constructor(Nombre:String,ID:number){'
-'this.Nombre = Nombre
-'this.ID = ID}
-
-+abstract PrecioFinal():number
-}
-
-
-
-enum Categoria{
-ENTRADA,
-PLATOPRINCIPAL,
-BEBIDA,
-POSTRE,
-}
-
-
-
-class Articulo{
--PrecioArticulo : Number
--Categoria : Categoria
-'A CHECKEAR
-'constructor(PrecioArticulo:PrecioArticulo, Categoria: Categoria){
-'    super(Nombre,ID);
-'    this.PrecioArticulo = PrecioArticulo
-'    this.Categoria = Categoria}
-
-+PrecioFinal()
-'return this.PrecioArticulo
-}
-
-'const Hamburguesita = new Articulo("Hamburguesa",12,9000,Categoria.PLATOPRINCIPAL);
-'Hamburguesita.PrecioFinal(); (Retorna 9k)
-'const Coquita = new Articulo ("Coquita",13,5000,Categoria.BEBIDA);
-
-
-class Combo{
--PrecioCombo : PrecioCombo
--Articulos :Articulo[]
-'constructor(){
-'super('Parametros);
-'this.PrecioCombo=PrecioCombo
-'this.Articulos: [];
-'}
-
-+AgregarArticulo()
-'this.Articulos.push(articulo);
-+PrecioFinal()
-'No tan claro como funciona este metodo en Combos
-}
-
-
-
-'const COMBO1 =new Combo("Combo 1",1,Descuentode30);
-'COMBO1.AgregarArticulo(Hamburguesita);
-'COMBO1.AgregarArticulo(Coquita);
-
-
-abstract class PrecioCombo{
-+abstract CalcularPrecio(Articulo: Articulo[])
-'Calcular Precio va a calcular en las clases de abajo por separado el precio final del combo con distintos descuentos.
-}
-
-
-class DescuentoPorcentualCombo{
--PorcentajeDescuentoCombo: number
-' +CalcularPrecio() Lo implementa o hereda (duda) desde PrecioCombo
-}
-
-'cont Descuentode30 = new DescuentoPorcentualCombo(30)
-'Descuento30.CalcularPrecio()
-
-
-class DescuentoFijoCombo{
--MontoDescontadoCombo: number
-' +CalcularPrecio() Lo implementa o hereda (duda) desde PrecioCombo
-}
-
-'//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-enum DiaSemana{
-LUNES,
-MARTES,
-MIERCOLES,
-JUEVES,
-VIERNES,
-SABADO,
-DOMINGO,
-}
-
-
-
-enum TipoDeMetodoDePago{
-EFECTIVO,
-TARJETA,
-BILLETERAVIRTUAL,
-}
-
-
-
-abstract class MetodoDePago{
-
-#NombreMetodoDePago: String
-#TipoDeMetodoDePago: TipoDeMetodoDePago
-
-+GetMetodoDePago():string
-+GetTipoDeMetodoDePago(): TipoDeMetodoDePago
-}
-
-
-
-class Efectivo{
-
-}
-
-class Tarjetas{
-
-}
-
-class BilleteraVirtual{
-
-}
-
-
-
-abstract class Descuento{
-
-#PorcentajeDescuento:number
-
-+EsAplicable():boolean
-+CantidadDeDescuento():number
-+GetPorcentajeDescuento():number
-+AplicarDescuento():number
-
-}
-
-
-class DescuentoPorDia{
-
--Dia: DiaSemana
-
-+EsAplicable():boolean
-
-}
-
-class DescuentoPorMetodoDePago{
-
--MetodoDePago:TipoDeMetodoDePago
-
-+EsAplicable():boolean
-
-}
-
-class Caja{
-
--Pedidos: Pedido
--MetodoDePago: MetodoDePago
-
-+CompetenciaDeDescuentos()
-+CobrarPrecioFinalConDescuento()
-+GetMetodoDePago()
-+getDiaPedido()
-
-}
-
-'////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-' Relaciones
-
-Pedido <|-- PedidoEnvio
-Pedido <|-- PedidoRetirar
 Pedido <|-- PedidoSalon
-Pedido o-- Item
+Pedido <|-- PedidoRetirar
+Pedido <|-- PedidoEnvio
+
+Pedido "1" o-- "0..*" Item : productosFinales
+
+' ==================================================
+' ITEMS Y COMBOS
+' ==================================================
+
+abstract class Item {
+    #nombre: string
+    #idItem: number
+    #estado: EstadoItem
+
+    +constructor(nombre: string, idItem: number)
+    +precioFinal(): number
+    +iniciarPreparacion(): void
+    +finalizarPreparacion(): void
+    +getEstado(): EstadoItem
+}
+
+class Articulo {
+    -precioArticulo: number
+    -categoria: Categoria
+    -estacion: TipoDeEstacion
+    +precioFinal(): number
+    +getEstacion(): TipoDeEstacion
+}
+
+class Combo {
+    -articulos: Articulo[]
+    -estrategiaPrecio: PrecioCombo
+    +precioFinal(): number
+    +getArticulos(): Articulo[]
+    +getEstado(): EstadoItem
+    +iniciarPreparacion(): void
+    +finalizarPreparacion(): void
+}
 
 Item <|-- Articulo
 Item <|-- Combo
 
+Combo "1" o-- "1..*" Articulo : articulos
+
+' ==================================================
+' STRATEGY: PRECIO DE COMBOS
+' ==================================================
+
+abstract class PrecioCombo {
+    +calcularPrecio(precioOriginal: number): number
+}
+
+class DescuentoFijoCombo {
+    -montoDescontado: number
+    +calcularPrecio(precioOriginal: number): number
+}
+
+class DescuentoPorcentualCombo {
+    -porcentajeDescuento: number
+    +calcularPrecio(precioOriginal: number): number
+}
+
+PrecioCombo <|-- DescuentoFijoCombo
+PrecioCombo <|-- DescuentoPorcentualCombo
+
+Combo --> PrecioCombo : estrategiaPrecio
+
+' ==================================================
+' ESTACIONES Y RESTAURANTE
+' ==================================================
+
+class Estacion {
+    -tipoDeEstacion: TipoDeEstacion
+    -colaDeItems: Item[]
+    -itemEnPreparacion: Item | null
+
+    +constructor(tipoDeEstacion: TipoDeEstacion)
+    +recibirItem(item: Item): void
+    +iniciarSiguienteItem(): Item
+    +finalizarItemActual(): Item
+    +getTipoDeEstacion(): TipoDeEstacion
+    +getCantidadItemsEnEspera(): number
+    +getItemEnPreparacion(): Item | null
+}
+
+class Restaurante {
+    -estaciones: Estacion[]
+
+    +constructor(estaciones: Estacion[])
+    +confirmarYDistribuirPedido(pedido: Pedido): void
+    -buscarEstacion(tipo: TipoDeEstacion): Estacion
+    +getEstacion(tipo: TipoDeEstacion): Estacion
+}
+
+Restaurante "1" o-- "1..*" Estacion
+Estacion --> Item : prepara
+Restaurante ..> Pedido : confirma y distribuye
+
+' ==================================================
+' MEDIOS DE PAGO
+' ==================================================
+
+abstract class MetodoDePago {
+    #nombreMetodoDePago: string
+    #tipoDeMetodoDePago: TipoDeMetodoDePago
+
+    +getNombreMetodoDePago(): string
+    +getTipoDeMetodoDePago(): TipoDeMetodoDePago
+}
+
+class Efectivo
+class Tarjetas
+class BilleteraVirtual
 
 MetodoDePago <|-- Efectivo
 MetodoDePago <|-- Tarjetas
 MetodoDePago <|-- BilleteraVirtual
 
-Descuento <|-- DescuentoPorMetodoDePago
+' ==================================================
+' STRATEGY: DESCUENTOS
+' ==================================================
+
+abstract class Descuento {
+    #porcentajeDescuento: number
+
+    +esAplicable(condicion: Caja): boolean
+    +cantidadDeDescuento(cantidad: number): number
+    +getPorcentajeDescuento(): number
+    +aplicarDescuento(cantidad: number): number
+}
+
+class DescuentoPorDia {
+    -diaDeLaSemana: DiaSemana
+    +esAplicable(condicion: Caja): boolean
+}
+
+class DescuentoPorMetodoDePago {
+    -tipoDeMetodoDePago: TipoDeMetodoDePago
+    +esAplicable(condicion: Caja): boolean
+}
+
 Descuento <|-- DescuentoPorDia
+Descuento <|-- DescuentoPorMetodoDePago
 
-PrecioCombo <|-- DescuentoFijoCombo
-PrecioCombo <|-- DescuentoPorcentualCombo
+' ==================================================
+' CAJA
+' ==================================================
 
-Combo o-- Articulo
-Combo *-- PrecioCombo
+class Caja {
+    -pedidos: Pedido
+    -metodoDePago: MetodoDePago
+    -importeCobrado: number | null
 
-Caja o-- MetodoDePago
-Caja o-- Pedido
-Caja o-- Descuento
+    +constructor(pedidos: Pedido, metodoDePago: MetodoDePago)
+    +competenciaDeDescuentos(descuentos: Descuento[], precio: number): number
+    +cobrarPrecioFinalConDescuento(descuentos: Descuento[]): number
+    +getPedido(): Pedido
+    +getMetodoDePago(): MetodoDePago
+    +getImporteCobrado(): number | null
+    +getDiaPedido(): DiaSemana
+}
 
-Estacion -- Pedido
+Caja --> Pedido
+Caja --> MetodoDePago
+Caja ..> Descuento : aplica
 
-RestauranteForgon o-- Estacion
-RestauranteForgon o-- Pedido
-RestauranteForgon -- Cliente
-RestauranteForgon *-- Caja
+' ==================================================
+' HISTORIAL DE PEDIDOS
+' ==================================================
+
+interface RegistroPedido {
+    +pedido: Pedido
+    +importeCobrado: number
+}
+
+class HistorialPedidos {
+    -registros: RegistroPedido[]
+
+    +constructor()
+    +registrarPedido(caja: Caja): void
+    +consultarHistorial(): RegistroPedido[]
+    +buscarPedido(idPedido: number): RegistroPedido | undefined
+    +getCantidadPedidos(): number
+}
+
+HistorialPedidos "1" *-- "0..*" RegistroPedido
+RegistroPedido --> Pedido
+HistorialPedidos ..> Caja : registra pedido cobrado
+
+' ==================================================
+' ENUMERACIONES
+' ==================================================
+
+enum Categoria {
+    ENTRADA
+    PLATOPRINCIPAL
+    BEBIDA
+    POSTRE
+}
+
+enum TipoDeEstacion {
+    CARNES
+    ENSALADAS
+    POSTRES
+    BARRA
+}
+
+enum DiaSemana {
+    LUNES
+    MARTES
+    MIERCOLES
+    JUEVES
+    VIERNES
+    SABADO
+    DOMINGO
+}
+
+enum TipoDeMetodoDePago {
+    EFECTIVO
+    TARJETA
+    BILLETERAVIRTUAL
+}
+
+enum EstadoItem {
+    PENDIENTE
+    EN_PREPARACION
+    LISTO
+}
+
+enum EstadoPedido {
+    EN_CONSTRUCCION
+    CONFIRMADO
+}
+
+Articulo --> Categoria
+Articulo --> TipoDeEstacion
+Item --> EstadoItem
+Pedido --> EstadoPedido
+Pedido --> DiaSemana
+MetodoDePago --> TipoDeMetodoDePago
+DescuentoPorDia --> DiaSemana
 
 @enduml
