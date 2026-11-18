@@ -1,5 +1,4 @@
-import { describe, it } from "node:test";
-import * as assert from "node:assert/strict";
+import { describe, it, expect } from "@jest/globals";
 import { Articulo } from "../src/Articulo";
 import { Combo } from "../src/Combo";
 import { DescuentoFijoCombo } from "../src/DescuentoFijoCombo";
@@ -32,7 +31,7 @@ describe("Combo", () => {
             new DescuentoFijoCombo(1000)
         );
 
-        assert.equal(combo.precioFinal(), 6000);
+        expect(combo.precioFinal()).toBe(6000);
     });
 
     it("debe calcular el precio aplicando un descuento porcentual", () => {
@@ -46,19 +45,18 @@ describe("Combo", () => {
             new DescuentoPorcentualCombo(10)
         );
 
-        assert.equal(combo.precioFinal(), 6300);
+        expect(combo.precioFinal()).toBe(6300);
     });
 
     it("no debe permitir crear un combo vacío", () => {
-        assert.throws(
+        expect(
             () => new Combo(
                 "Combo vacío",
                 1,
                 [],
                 new DescuentoFijoCombo(500)
-            ),
-            /Un combo debe contener al menos un artículo/
-        );
+            )
+        ).toThrow(/Un combo debe contener al menos un artículo/);
     });
 
     it("debe devolver una copia de sus artículos", () => {
@@ -73,7 +71,7 @@ describe("Combo", () => {
         const articulos = combo.getArticulos();
         articulos.pop();
 
-        assert.equal(combo.getArticulos().length, 1);
+        expect(combo.getArticulos().length).toBe(1);
     });
 
     it("debe estar pendiente si todos sus artículos están pendientes", () => {
@@ -84,7 +82,7 @@ describe("Combo", () => {
             new DescuentoFijoCombo(0)
         );
 
-        assert.equal(combo.getEstado(), EstadoItem.PENDIENTE);
+        expect(combo.getEstado()).toBe(EstadoItem.PENDIENTE);
     });
 
     it("debe estar en preparación si algún artículo comenzó", () => {
@@ -98,7 +96,7 @@ describe("Combo", () => {
 
         articulo.iniciarPreparacion();
 
-        assert.equal(combo.getEstado(), EstadoItem.EN_PREPARACION);
+        expect(combo.getEstado()).toBe(EstadoItem.EN_PREPARACION);
     });
 
     it("debe estar listo cuando todos sus artículos están listos", () => {
@@ -113,7 +111,7 @@ describe("Combo", () => {
         articulo.iniciarPreparacion();
         articulo.finalizarPreparacion();
 
-        assert.equal(combo.getEstado(), EstadoItem.LISTO);
+        expect(combo.getEstado()).toBe(EstadoItem.LISTO);
     });
 
     it("no debe permitir iniciar la preparación directamente", () => {
@@ -124,10 +122,8 @@ describe("Combo", () => {
             new DescuentoFijoCombo(0)
         );
 
-        assert.throws(
-            () => combo.iniciarPreparacion(),
-            /Los componentes de un combo se preparan individualmente/
-        );
+        expect(() => combo.iniciarPreparacion())
+            .toThrow(/Los componentes de un combo se preparan individualmente/);
     });
 
     it("no debe permitir finalizar la preparación directamente", () => {
@@ -138,9 +134,7 @@ describe("Combo", () => {
             new DescuentoFijoCombo(0)
         );
 
-        assert.throws(
-            () => combo.finalizarPreparacion(),
-            /Los componentes de un combo se finalizan individualmente/
-        );
+        expect(() => combo.finalizarPreparacion())
+            .toThrow(/Los componentes de un combo se finalizan individualmente/);
     });
 });

@@ -1,6 +1,4 @@
-import * as assert from "node:assert/strict";
-import { test } from "node:test";
-
+import { describe, it, expect } from "@jest/globals";
 import { Articulo } from "../src/Articulo";
 import { Caja } from "../src/Caja";
 import { Efectivo } from "../src/Efectivo";
@@ -43,72 +41,72 @@ function crearCajaCobrado(idPedido: number): Caja {
     return caja;
 }
 
-test("no debe registrar un pedido que todavía no fue cobrado", () => {
-    const pedido = new PedidoSalon(1, DiaSemana.LUNES, 5);
+describe("HistorialPedidos", () => {
+    it("no debe registrar un pedido que todavía no fue cobrado", () => {
+        const pedido = new PedidoSalon(1, DiaSemana.LUNES, 5);
 
-    const caja = new Caja(
-        pedido,
-        new Efectivo("Efectivo", TipoDeMetodoDePago.EFECTIVO)
-    );
+        const caja = new Caja(
+            pedido,
+            new Efectivo("Efectivo", TipoDeMetodoDePago.EFECTIVO)
+        );
 
-    const historial = new HistorialPedidos();
+        const historial = new HistorialPedidos();
 
-    assert.throws(
-        () => historial.registrarPedido(caja),
-        /todavía no fue cobrado/
-    );
+        expect(() => historial.registrarPedido(caja))
+            .toThrow(/todavía no fue cobrado/);
 
-    assert.equal(historial.getCantidadPedidos(), 0);
-});
+        expect(historial.getCantidadPedidos()).toBe(0);
+    });
 
-test("debe registrar un pedido cobrado", () => {
-    const historial = new HistorialPedidos();
-    const caja = crearCajaCobrado(1);
+    it("debe registrar un pedido cobrado", () => {
+        const historial = new HistorialPedidos();
+        const caja = crearCajaCobrado(1);
 
-    historial.registrarPedido(caja);
+        historial.registrarPedido(caja);
 
-    assert.equal(historial.getCantidadPedidos(), 1);
-    assert.equal(historial.buscarPedido(1)?.importeCobrado, 10000);
-});
+        expect(historial.getCantidadPedidos()).toBe(1);
+        expect(historial.buscarPedido(1)?.importeCobrado).toBe(10000);
+    });
 
-test("debe devolver undefined cuando no encuentra un pedido", () => {
-    const historial = new HistorialPedidos();
+    it("debe devolver undefined cuando no encuentra un pedido", () => {
+        const historial = new HistorialPedidos();
 
-    assert.equal(historial.buscarPedido(99), undefined);
-});
+        expect(historial.buscarPedido(99)).toBeUndefined();
+    });
 
-test("debe consultar todos los pedidos registrados", () => {
-    const historial = new HistorialPedidos();
+    it("debe consultar todos los pedidos registrados", () => {
+        const historial = new HistorialPedidos();
 
-    historial.registrarPedido(crearCajaCobrado(1));
-    historial.registrarPedido(crearCajaCobrado(2));
+        historial.registrarPedido(crearCajaCobrado(1));
+        historial.registrarPedido(crearCajaCobrado(2));
 
-    const registros = historial.consultarHistorial();
+        const registros = historial.consultarHistorial();
 
-    assert.equal(registros.length, 2);
-    assert.equal(registros[0].pedido.getIdPedido(), 1);
-    assert.equal(registros[1].pedido.getIdPedido(), 2);
-    assert.equal(registros[0].importeCobrado, 10000);
-});
+        expect(registros.length).toBe(2);
+        expect(registros[0].pedido.getIdPedido()).toBe(1);
+        expect(registros[1].pedido.getIdPedido()).toBe(2);
+        expect(registros[0].importeCobrado).toBe(10000);
+    });
 
-test("debe devolver una copia de la lista del historial", () => {
-    const historial = new HistorialPedidos();
+    it("debe devolver una copia de la lista del historial", () => {
+        const historial = new HistorialPedidos();
 
-    historial.registrarPedido(crearCajaCobrado(1));
+        historial.registrarPedido(crearCajaCobrado(1));
 
-    const registros = historial.consultarHistorial();
-    registros.pop();
+        const registros = historial.consultarHistorial();
+        registros.pop();
 
-    assert.equal(historial.getCantidadPedidos(), 1);
-});
+        expect(historial.getCantidadPedidos()).toBe(1);
+    });
 
-test("debe buscar un pedido por su identificador", () => {
-    const historial = new HistorialPedidos();
+    it("debe buscar un pedido por su identificador", () => {
+        const historial = new HistorialPedidos();
 
-    historial.registrarPedido(crearCajaCobrado(10));
+        historial.registrarPedido(crearCajaCobrado(10));
 
-    const registro = historial.buscarPedido(10);
+        const registro = historial.buscarPedido(10);
 
-    assert.notEqual(registro, undefined);
-    assert.equal(registro?.pedido.getIdPedido(), 10);
+        expect(registro).toBeDefined();
+        expect(registro?.pedido.getIdPedido()).toBe(10);
+    });
 });

@@ -3,6 +3,8 @@ import { EstadoItem } from "./Enums";
 import { Item } from "./Item";
 import { PrecioCombo } from "./PrecioCombo";
 
+const CANTIDAD_MINIMA_ARTICULOS: number = 0;
+
 /**
  * Representa un combo compuesto por varios artículos.
  *
@@ -30,7 +32,7 @@ export class Combo extends Item {
     ) {
         super(nombre, idItem);
 
-        if (articulos.length === 0) {
+        if (articulos.length === CANTIDAD_MINIMA_ARTICULOS) {
             throw new Error(
                 "Un combo debe contener al menos un artículo."
             );
@@ -99,6 +101,8 @@ export class Combo extends Item {
      *
      * @throws Error porque los componentes se preparan por separado.
      */
+    // Sobrescritura intencional: impide preparar directamente el combo.
+    // eslint-disable-next-line @typescript-eslint/class-methods-use-this
     public override iniciarPreparacion(): void {
         throw new Error(
             "Los componentes de un combo se preparan individualmente."
@@ -111,6 +115,8 @@ export class Combo extends Item {
      *
      * @throws Error porque los componentes se finalizan por separado.
      */
+    // Sobrescritura intencional: impide finalizar directamente el combo.
+    // eslint-disable-next-line @typescript-eslint/class-methods-use-this
     public override finalizarPreparacion(): void {
         throw new Error(
             "Los componentes de un combo se finalizan individualmente."

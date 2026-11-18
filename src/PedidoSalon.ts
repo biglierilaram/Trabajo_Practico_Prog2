@@ -10,6 +10,7 @@ import { Pedido } from "./Pedido";
  */
 export class PedidoSalon extends Pedido {
     private numeroDeMesa: number;
+    private static readonly indiceItemNoEncontrado: number = -1;
 
     /**
      * Crea un pedido para una mesa determinada.
@@ -48,7 +49,7 @@ export class PedidoSalon extends Pedido {
         const items: Item[] = this.getItems();
         const indice: number = items.indexOf(item);
 
-        if (indice === -1) {
+        if (indice === PedidoSalon.indiceItemNoEncontrado) {
             return;
         }
 

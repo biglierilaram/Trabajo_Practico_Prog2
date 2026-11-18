@@ -1,6 +1,3 @@
-import * as assert from "node:assert/strict";
-import { test } from "node:test";
-
 import { Articulo } from "../src/Articulo";
 import { BilleteraVirtual } from "../src/BilleteraVirtual";
 import { Caja } from "../src/Caja";
@@ -50,7 +47,7 @@ test("debe aplicar el descuento correspondiente al día", () => {
     const caja = new Caja(pedido, efectivo);
     const descuento = new DescuentoPorDia(15, DiaSemana.MARTES);
 
-    assert.equal(caja.competenciaDeDescuentos([descuento], 10000), 8500);
+    expect(caja.competenciaDeDescuentos([descuento], 10000)).toBe(8500);
 });
 
 test("debe aplicar el descuento correspondiente al medio de pago", () => {
@@ -66,7 +63,7 @@ test("debe aplicar el descuento correspondiente al medio de pago", () => {
         TipoDeMetodoDePago.EFECTIVO
     );
 
-    assert.equal(caja.competenciaDeDescuentos([descuento], 10000), 9000);
+    expect(caja.competenciaDeDescuentos([descuento], 10000)).toBe(9000);
 });
 
 test("debe elegir el descuento que deja el menor precio", () => {
@@ -86,7 +83,7 @@ test("debe elegir el descuento que deja el menor precio", () => {
         )
     ];
 
-    assert.equal(caja.competenciaDeDescuentos(descuentos, 10000), 8500);
+    expect(caja.competenciaDeDescuentos(descuentos, 10000)).toBe(8500);
 });
 
 test("no debe aplicar descuentos que no correspondan", () => {
@@ -106,7 +103,7 @@ test("no debe aplicar descuentos que no correspondan", () => {
         )
     ];
 
-    assert.equal(caja.competenciaDeDescuentos(descuentos, 10000), 10000);
+    expect(caja.competenciaDeDescuentos(descuentos, 10000)).toBe(10000);
 });
 
 test("no debe cobrar un pedido cuyos artículos no están listos", () => {
@@ -129,12 +126,10 @@ test("no debe cobrar un pedido cuyos artículos no están listos", () => {
 
     const caja = new Caja(pedido, efectivo);
 
-    assert.throws(
-        () => caja.cobrarPrecioFinalConDescuento([]),
-        /todos sus ítems estén listos/
-    );
+    expect(() => caja.cobrarPrecioFinalConDescuento([]))
+        .toThrow(/todos sus ítems estén listos/);
 
-    assert.equal(caja.getImporteCobrado(), null);
+    expect(caja.getImporteCobrado()).toBeNull();
 });
 
 test("debe cobrar el pedido y guardar el importe cobrado", () => {
@@ -151,8 +146,8 @@ test("debe cobrar el pedido y guardar el importe cobrado", () => {
         TipoDeMetodoDePago.EFECTIVO
     );
 
-    assert.equal(caja.cobrarPrecioFinalConDescuento([descuento]), 9000);
-    assert.equal(caja.getImporteCobrado(), 9000);
+    expect(caja.cobrarPrecioFinalConDescuento([descuento])).toBe(9000);
+    expect(caja.getImporteCobrado()).toBe(9000);
 });
 
 test("no debe permitir cobrar dos veces el mismo pedido", () => {
@@ -166,10 +161,8 @@ test("no debe permitir cobrar dos veces el mismo pedido", () => {
 
     caja.cobrarPrecioFinalConDescuento([]);
 
-    assert.throws(
-        () => caja.cobrarPrecioFinalConDescuento([]),
-        /Este pedido ya fue cobrado/
-    );
+    expect(() => caja.cobrarPrecioFinalConDescuento([]))
+        .toThrow(/Este pedido ya fue cobrado/);
 });
 
 test("debe sumar el costo de envío después de aplicar descuentos", () => {
@@ -194,9 +187,9 @@ test("debe sumar el costo de envío después de aplicar descuentos", () => {
         TipoDeMetodoDePago.EFECTIVO
     );
 
-    assert.equal(caja.cobrarPrecioFinalConDescuento([descuento]), 10500);
-    assert.equal(pedido.getDomicilioPedido(), "Calle 123");
-    assert.equal(pedido.getCostoDeEnvio(), 1500);
+    expect(caja.cobrarPrecioFinalConDescuento([descuento])).toBe(10500);
+    expect(pedido.getDomicilioPedido()).toBe("Calle 123");
+    expect(pedido.getCostoDeEnvio()).toBe(1500);
 });
 
 test("debe devolver los datos del pedido y del medio de pago", () => {
@@ -209,9 +202,9 @@ test("debe devolver los datos del pedido y del medio de pago", () => {
 
     const caja = new Caja(pedido, efectivo);
 
-    assert.equal(caja.getMetodoDePago(), TipoDeMetodoDePago.EFECTIVO);
-    assert.equal(caja.getDiaPedido(), DiaSemana.MARTES);
-    assert.equal(caja.getPedido(), pedido);
+    expect(caja.getMetodoDePago()).toBe(TipoDeMetodoDePago.EFECTIVO);
+    expect(caja.getDiaPedido()).toBe(DiaSemana.MARTES);
+    expect(caja.getPedido()).toBe(pedido);
 });
 
 test("los medios de pago deben devolver sus datos", () => {
@@ -230,14 +223,14 @@ test("los medios de pago deben devolver sus datos", () => {
         TipoDeMetodoDePago.BILLETERAVIRTUAL
     );
 
-    assert.equal(efectivo.getMetodoDePago(), "Efectivo");
-    assert.equal(tarjeta.getMetodoDePago(), "Tarjeta");
-    assert.equal(billetera.getMetodoDePago(), "Billetera virtual");
+    expect(efectivo.getMetodoDePago()).toBe("Efectivo");
+    expect(tarjeta.getMetodoDePago()).toBe("Tarjeta");
+    expect(billetera.getMetodoDePago()).toBe("Billetera virtual");
 
-    assert.equal(efectivo.getTipoDeMetodoDePago(), TipoDeMetodoDePago.EFECTIVO);
-    assert.equal(tarjeta.getTipoDeMetodoDePago(), TipoDeMetodoDePago.TARJETA);
-    assert.equal(
-        billetera.getTipoDeMetodoDePago(),
-        TipoDeMetodoDePago.BILLETERAVIRTUAL
-    );
+    expect(efectivo.getTipoDeMetodoDePago())
+        .toBe(TipoDeMetodoDePago.EFECTIVO);
+    expect(tarjeta.getTipoDeMetodoDePago())
+        .toBe(TipoDeMetodoDePago.TARJETA);
+    expect(billetera.getTipoDeMetodoDePago())
+        .toBe(TipoDeMetodoDePago.BILLETERAVIRTUAL);
 });

@@ -1,5 +1,4 @@
-import { describe, it } from "node:test";
-import * as assert from "node:assert/strict";
+import { describe, it, expect } from "@jest/globals";
 import { Articulo } from "../src/Articulo";
 import { Estacion } from "../src/Estacion";
 import {
@@ -25,7 +24,7 @@ describe("Estacion", () => {
 
         estacion.recibirItem(articulo);
 
-        assert.equal(estacion.getCantidadItemsEnEspera(), 1);
+        expect(estacion.getCantidadItemsEnEspera()).toBe(1);
     });
 
     it("no debe recibir un ítem que ya comenzó su preparación", () => {
@@ -34,10 +33,8 @@ describe("Estacion", () => {
 
         articulo.iniciarPreparacion();
 
-        assert.throws(
-            () => estacion.recibirItem(articulo),
-            /La estación solo puede recibir ítems pendientes/
-        );
+        expect(() => estacion.recibirItem(articulo))
+            .toThrow(/La estación solo puede recibir ítems pendientes/);
     });
 
     it("debe iniciar la preparación del siguiente ítem", () => {
@@ -48,10 +45,10 @@ describe("Estacion", () => {
 
         const iniciado = estacion.iniciarSiguienteItem();
 
-        assert.equal(iniciado, articulo);
-        assert.equal(articulo.getEstado(), EstadoItem.EN_PREPARACION);
-        assert.equal(estacion.getItemEnPreparacion(), articulo);
-        assert.equal(estacion.getCantidadItemsEnEspera(), 0);
+        expect(iniciado).toBe(articulo);
+        expect(articulo.getEstado()).toBe(EstadoItem.EN_PREPARACION);
+        expect(estacion.getItemEnPreparacion()).toBe(articulo);
+        expect(estacion.getCantidadItemsEnEspera()).toBe(0);
     });
 
     it("no debe iniciar otro ítem si ya hay uno en preparación", () => {
@@ -70,19 +67,15 @@ describe("Estacion", () => {
 
         estacion.iniciarSiguienteItem();
 
-        assert.throws(
-            () => estacion.iniciarSiguienteItem(),
-            /La estación ya tiene un ítem en preparación/
-        );
+        expect(() => estacion.iniciarSiguienteItem())
+            .toThrow(/La estación ya tiene un ítem en preparación/);
     });
 
     it("no debe iniciar un ítem si la cola está vacía", () => {
         const estacion = new Estacion(TipoDeEstacion.CARNES);
 
-        assert.throws(
-            () => estacion.iniciarSiguienteItem(),
-            /No hay ítems pendientes/
-        );
+        expect(() => estacion.iniciarSiguienteItem())
+            .toThrow(/No hay ítems pendientes/);
     });
 
     it("debe finalizar el ítem que está en preparación", () => {
@@ -94,26 +87,21 @@ describe("Estacion", () => {
 
         const finalizado = estacion.finalizarItemActual();
 
-        assert.equal(finalizado, articulo);
-        assert.equal(articulo.getEstado(), EstadoItem.LISTO);
-        assert.equal(estacion.getItemEnPreparacion(), null);
+        expect(finalizado).toBe(articulo);
+        expect(articulo.getEstado()).toBe(EstadoItem.LISTO);
+        expect(estacion.getItemEnPreparacion()).toBeNull();
     });
 
     it("no debe finalizar si no hay ningún ítem en preparación", () => {
         const estacion = new Estacion(TipoDeEstacion.CARNES);
 
-        assert.throws(
-            () => estacion.finalizarItemActual(),
-            /No hay ningún ítem en preparación/
-        );
+        expect(() => estacion.finalizarItemActual())
+            .toThrow(/No hay ningún ítem en preparación/);
     });
 
     it("debe devolver el tipo de estación", () => {
         const estacion = new Estacion(TipoDeEstacion.CARNES);
 
-        assert.equal(
-            estacion.getTipoDeEstacion(),
-            TipoDeEstacion.CARNES
-        );
+        expect(estacion.getTipoDeEstacion()).toBe(TipoDeEstacion.CARNES);
     });
 });

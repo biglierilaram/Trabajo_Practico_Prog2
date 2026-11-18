@@ -10,6 +10,7 @@ import { Item } from "./Item";
 export abstract class Pedido {
     private static readonly itemNoEncontrado: number = -1;
     private static readonly cantidadItemsAEliminar: number = 1;
+    private static readonly cantidadMinimaItems: number = 0;
 
     protected idPedido: number;
     private diaDePedido: DiaSemana;
@@ -119,7 +120,7 @@ export abstract class Pedido {
     public confirmar(): void {
         this.validarEnConstruccion();
 
-        if (this.productosFinales.length === 0) {
+        if (this.productosFinales.length === Pedido.cantidadMinimaItems) {
             throw new Error(
                 "No se puede confirmar un pedido sin ítems."
             );
@@ -144,7 +145,7 @@ export abstract class Pedido {
      */
     public estanTodosLosItemsListos(): boolean {
         return (
-            this.productosFinales.length > 0 &&
+            this.productosFinales.length > Pedido.cantidadMinimaItems &&
             this.productosFinales.every(
                 (item: Item) => item.getEstado() === EstadoItem.LISTO
             )

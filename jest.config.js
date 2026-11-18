@@ -8,12 +8,12 @@ module.exports = {
   coverageReporters: ["clover", "json", "lcov", ["text", { "skipFull": true }]],
   preset: "ts-jest",
   testEnvironment: "node",
-  testMatch: ["<rootDir>/tests/**/*.test.ts"],
+  testMatch: ["<rootDir>/Tests/**/*.test.ts"],
   testPathIgnorePatterns: [
     "node_modules",
-    "tests/data.ts",
-    "tests/common.mocks.ts",
-    "tests/integ"
+    "Tests/data.ts",
+    "Tests/common.mocks.ts",
+    "Tests/integ"
   ],
   testTimeout: 22000,
   verbose: false,
@@ -23,6 +23,6 @@ module.exports = {
     ["jest-junit", { outputDirectory: "coverage", usePathForSuiteName: true, reportedFilePath: "absolute" }],
   ],
   transform: {
-    '^.+\\.(ts|tsx)$': ['ts-jest', { tsconfig: './tsconfig.json' }],
+    '^.+\\.(ts|tsx)$': ['ts-jest', { tsconfig: './tsconfig.test.json' }],
   },
 };

@@ -1,3 +1,4 @@
+/* eslint @typescript-eslint/no-magic-numbers: off */
 import { Articulo } from "./Articulo";
 import { Caja } from "./Caja";
 import { Descuento } from "./Descuento";

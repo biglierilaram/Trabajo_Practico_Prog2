@@ -2,7 +2,6 @@ import { Articulo } from "./Articulo";
 import { Combo } from "./Combo";
 import { Estacion } from "./Estacion";
 import { EstadoItem, TipoDeEstacion } from "./Enums";
-import { Item } from "./Item";
 import { Pedido } from "./Pedido";
 
 /**

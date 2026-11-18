@@ -10,6 +10,7 @@ import { Pedido } from "./Pedido";
  */
 export class PedidoRetirar extends Pedido {
     private horarioDeRetiro: string;
+    private static readonly indiceItemNoEncontrado: number = -1;
 
     /**
      * Crea un pedido para retirar.
@@ -52,7 +53,7 @@ export class PedidoRetirar extends Pedido {
         const items: Item[] = this.getItems();
         const indice: number = items.indexOf(item);
 
-        if (indice === -1) {
+        if (indice === PedidoRetirar.indiceItemNoEncontrado) {
             return;
         }
 

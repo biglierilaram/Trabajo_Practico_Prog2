@@ -1,5 +1,3 @@
-import { describe, it } from "node:test";
-import * as assert from "node:assert/strict";
 import { Articulo } from "../src/Articulo";
 import { Categoria, EstadoItem, TipoDeEstacion } from "../src/Enums";
 
@@ -13,7 +11,7 @@ describe("Item", () => {
             TipoDeEstacion.CARNES
         );
 
-        assert.equal(articulo.getEstado(), EstadoItem.PENDIENTE);
+        expect(articulo.getEstado()).toBe(EstadoItem.PENDIENTE);
     });
 
     it("debe pasar de PENDIENTE a EN_PREPARACION", () => {
@@ -27,7 +25,7 @@ describe("Item", () => {
 
         articulo.iniciarPreparacion();
 
-        assert.equal(articulo.getEstado(), EstadoItem.EN_PREPARACION);
+        expect(articulo.getEstado()).toBe(EstadoItem.EN_PREPARACION);
     });
 
     it("debe pasar de EN_PREPARACION a LISTO", () => {
@@ -42,7 +40,7 @@ describe("Item", () => {
         articulo.iniciarPreparacion();
         articulo.finalizarPreparacion();
 
-        assert.equal(articulo.getEstado(), EstadoItem.LISTO);
+        expect(articulo.getEstado()).toBe(EstadoItem.LISTO);
     });
 
     it("no debe permitir iniciar la preparación dos veces", () => {
@@ -56,8 +54,7 @@ describe("Item", () => {
 
         articulo.iniciarPreparacion();
 
-        assert.throws(
-            () => articulo.iniciarPreparacion(),
+        expect(() => articulo.iniciarPreparacion()).toThrow(
             /Solo se puede iniciar/
         );
     });
@@ -71,8 +68,7 @@ describe("Item", () => {
             TipoDeEstacion.CARNES
         );
 
-        assert.throws(
-            () => articulo.finalizarPreparacion(),
+        expect(() => articulo.finalizarPreparacion()).toThrow(
             /Solo se puede finalizar/
         );
     });
